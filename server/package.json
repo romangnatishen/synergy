@@ -1,0 +1,32 @@
+{
+  "name": "vuejscouse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@app-masters/hubstaff-node-client": "^1.0.5",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "i": "^0.3.6",
+    "jshint": "^2.12.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-pre-gyp": "^0.17.0",
+    "node-redmine": "^0.2.2",
+    "nodemon": "^2.0.7",
+    "npm": "^7.11.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.22.3"
+  },
+  "devdependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
