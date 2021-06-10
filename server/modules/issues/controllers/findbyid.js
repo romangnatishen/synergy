@@ -9,8 +9,7 @@ var redmine = new Redmine(hostname, config);
   
 module.exports = async (req, res, next) => {
     const redmineQuery = req.query.redmineQuery;
-    console.log(typeof req.query.taskId);
-    redmine.get_issue_by_id(req.query.taskId,redmineQuery, function(err, data) {
+    redmine.get_issue_by_id(Number(req.query.taskId),redmineQuery, function(err, data) {
     if (err) {
         res.status(400).send(data)
     };
