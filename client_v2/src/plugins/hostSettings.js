@@ -1,3 +1,3 @@
 export default {
-	DB_HOST:'http://localhost:3000'
+	DB_HOST:'https://apisynergy.axioma.pl'
 }
