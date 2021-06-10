@@ -672,7 +672,7 @@ async deleteTask(issue) {
   border: 3px solid #73AD21;  
 }
 
-@media screen and (max-width: 1700px) {
+@media screen and (max-width: 4000px) {
   .task-board {
     position: relative;
     display: flex; 
