@@ -240,13 +240,14 @@ export default {
       filterProject:0,
       kanban_data: [],
       issue_comments: [],
+
       issue_comments_fields : [
-      { key:'id'},
-      { key:'issue_id'},
-      { key:'user_id'},
-      { key:'user_name'},
-      { key:'description'},
-      { key:'createdAt'},
+      // { key:'id'},
+      // { key:'issue_id'},
+      // { key:'user_id'},
+      { key:'user_name', label:'Użytkownik'},
+      { key:'description', label:'Opis'},
+      { key:'createdAt', label:'Data zmiany'},
     ]};
   },
 
