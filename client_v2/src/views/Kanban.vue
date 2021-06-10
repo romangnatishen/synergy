@@ -203,6 +203,13 @@
       </template>
       <template #footer>
         <CButton v-if="issueIsFound" @click="addKanbanComment()" color="success">Zapisz zmiany</CButton>
+        <CButton
+          color="info" 
+          @click="openInRedmine"
+        >
+          Otwórz w Redmine
+        </CButton>
+
         <CButton @click="cancelIssueModification()" color="danger">Cofnij</CButton>
       </template>
     </CModal>
@@ -310,6 +317,10 @@ computed: {
     }
 
   },   
+
+  async openInRedmine() {
+    window.open('https://tasks.axioma.pl/issues/'+String(this.foundIssue.id));
+  },
 
   cancelIssueModification() {
     this.showTaskDetails = false;
@@ -435,10 +446,11 @@ computed: {
   async refreshKanban() {
 
     this.kanban_data =  [
-      {id:1, title: "Backlog",tasks: []},
-      {id:2, title:"Na wykonaniu", tasks:[]},
-      {id:3, title:"Sprawdzenie", tasks:[]},
-      {id:4, title:"Do poprawy", tasks:[]}
+      {id:1, redmine_status_id:8, title: "Backlog",tasks: []},
+      {id:2, redmine_status_id:2, title:"Na wykonaniu", tasks:[]},
+      {id:3, redmine_status_id:3, title:"Sprawdzenie", tasks:[]},
+      {id:4, redmine_status_id:7, title:"Zawieszone", tasks:[]},
+      {id:5, redmine_status_id:5, title:"Do poprawy", tasks:[]}
     ]
 
     for await (let kanbanItem of this.kanban_data) {
@@ -483,6 +495,50 @@ computed: {
     console.log(issue);
   },
 
+  async makeChangesInRedmine(issueData) {
+    
+    const currentProfile = this.$store.getters['profile/getProfile'];
+
+    if (currentProfile) {
+
+      const updateFilter = JSON.parse(issueData.updateFilter);
+      const updateContent = JSON.parse(issueData.updateContent);
+
+      const issueId = updateFilter.where.issue_id;
+      let redmineStatusId = 0;
+      let modificationComment = "";
+      if (updateContent.kanban_status_id) {
+        const statusId = this.kanban_data.find(el=> el.id === updateContent.kanban_status_id);
+        redmineStatusId = statusId.redmine_status_id;
+        modificationComment = `Zmiana statusu zadania na: ${statusId.title}`;
+      } else if (updateContent.acceptIssue === true) {
+        redmineStatusId = 4;
+        modificationComment = 'Usunięto zadanie z Kanban';
+      }
+
+      const updateData = {
+        taskId: Number(issueId).toString(),
+        redmineQuery: {
+          issue: {
+            status_id: redmineStatusId
+          }
+        }
+      };
+
+      await this.$store.dispatch("issues/updateIssue", updateData);
+
+      const addData = {
+        issue_id:issueId,
+        user_id:currentProfile.id,
+        user_name:currentProfile.name,
+        description:modificationComment
+      };
+      await this.$store.dispatch("issues/addKanbanComment", addData);
+    }
+
+
+  },
+
   async moveToAnotherStatus(issue,moveForward) {
    
     let actionIsPossible = false;
@@ -514,7 +570,7 @@ computed: {
             where: 
               { 
                   issue_id: issue.issue_id,
-                  executor_id: this.filterExecutor
+                  // executor_id: this.filterExecutor
               } 
           };
         const updateContent = {
@@ -524,7 +580,9 @@ computed: {
           updateFilter:JSON.stringify(updateFilter),
           updateContent:JSON.stringify(updateContent)
         };
+
         await this.$store.dispatch("issues/updateKanbanIssue", updateData, updateData);
+        await this.makeChangesInRedmine(updateData);
 
       }
     }        
@@ -539,19 +597,38 @@ computed: {
       const currentStatus = Number(issue.kanban_status_id) - 1;
       const tasksFrom = this.kanban_data[currentStatus].tasks;
       const index = tasksFrom.indexOf(issue);
+      console.log('task from', tasksFrom);
+      console.log('index', index);
       if (index > -1) {
         tasksFrom.splice(index, 1);
         const deleteFilter = { 
             where: 
               { 
                   issue_id: issue.issue_id,
-                  executor_id: this.filterExecutor
+                  // executor_id: this.filterExecutor
               } 
           };
         const updateData = {
           deleteFilter:JSON.stringify(deleteFilter),
         };
         await this.$store.dispatch("issues/deleteKanbanIssue", updateData, updateData);
+
+        const redmineUpdateFilter = { 
+            where: 
+              { 
+                  issue_id: issue.issue_id,
+                  // executor_id: this.filterExecutor
+              } 
+          };
+        const redmineUpdateContent = {
+          acceptIssue:true
+          };
+        const redmineUpdateData = {
+          updateFilter:JSON.stringify(redmineUpdateFilter),
+          updateContent:JSON.stringify(redmineUpdateContent)
+        };
+        await this.makeChangesInRedmine(redmineUpdateData);
+
       }
     }
   },
@@ -574,6 +651,22 @@ async deleteTask(issue) {
           deleteFilter:JSON.stringify(deleteFilter),
         };
         await this.$store.dispatch("issues/deleteKanbanIssue", updateData, updateData);
+
+        const redmineUpdateFilter = { 
+            where: 
+              { 
+                  issue_id: issue.issue_id,
+              } 
+          };
+        const redmineUpdateContent = {
+          kanban_status_id:6
+          };
+        const redmineUpdateData = {
+          updateFilter:JSON.stringify(redmineUpdateFilter),
+          updateContent:JSON.stringify(redmineUpdateContent)
+        };
+        await this.makeChangesInRedmine(redmineUpdateData);
+
       }
     }
   },
@@ -616,7 +709,7 @@ async deleteTask(issue) {
             where: 
               { 
                   issue_id: issue_id,
-                  executor_id: this.filterExecutor
+                  // executor_id: this.filterExecutor
               } 
           };
         const updateContent = {
@@ -627,6 +720,8 @@ async deleteTask(issue) {
           updateContent:JSON.stringify(updateContent)
         };
         await this.$store.dispatch("issues/updateKanbanIssue", updateData, updateData);
+        await this.makeChangesInRedmine(updateData);
+
       }
 
   },
