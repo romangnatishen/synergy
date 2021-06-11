@@ -54,23 +54,53 @@ export default {
 	
 		async projectMembers(payload,params) {
 			
-			const redmineParams = redmineConnection(this.getters,params);
+			let redmineParams = redmineConnection(this.getters,params);
 
 			const data = requestDataHandler("GET",
 			`${hostSettings.DB_HOST}/project_members`,														
 			redmineParams, redmineParams);
-			const response = await axios(data).catch(err => {
-				console.log(err);
+
+			const response = await axios(data);
+			if (response.status === 200) {
+				// params.status = 1;
+				let respArray = [];				
+				// console.log(response.data.projects);
+
+				respArray.push(response.data.memberships);
+				let iterationsNumber = response.data.total_count / response.data.limit;
+				iterationsNumber = Math.ceil(iterationsNumber) - 1;
+				for (let i = 1; i <= iterationsNumber; i++) {
+					params.offset = i*response.data.limit;
+					redmineParams = redmineConnection(this.getters,params);
+					// console.log('we are here');
+					let nextData = requestDataHandler("GET",
+					`${hostSettings.DB_HOST}/project_members`,														
+					redmineParams, redmineParams);
+					
+					const nextResponse = await axios(nextData);
+					if (nextResponse.status === 200) {
+						respArray.push(nextResponse.data.memberships);
+					}
+				}										
+				return respArray;
+			} 
+			else {
 				return []
-			});
-			if (typeof response === "object" && response.status === 200) {
-//			commit("SET_ALL", parsedResponse);
-			return response;
 			}
-			return [];
+
+// 			const response = await axios(data).catch(err => {
+// 				console.log(err);
+// 				return []
+// 			});
+// 			if (typeof response === "object" && response.status === 200) {
+// //			commit("SET_ALL", parsedResponse);
+// 			return response;
+// 			}
+// 			return [];
 		},
 
 		async findAll() {
+
 			let redmineParams = redmineConnection(this.getters);
 			const filterProjectsByCountry = generalFunctions.filterProjectsByCountry;
 
@@ -79,6 +109,9 @@ export default {
 			undefined, redmineParams);
 			
 			const response = await axios(data);
+			
+			console.log(response);
+
 			if (response.status === 200) {
 				let params = {status:1};
 				let respArray = [];				

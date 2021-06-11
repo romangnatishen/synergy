@@ -222,14 +222,16 @@ methods: {
     const executorsDataObject = await this.$store.dispatch("projects/projectMembers", {id:this.projectId});
     if (executorsDataObject) {
       let executorsData = [];
-      executorsDataObject.data.memberships.forEach(el => {
-        executorsData.push(
-          {              
-          value: el.user.id,
-          label: el.user.name,
-          }
-        )
-      });
+      executorsDataObject.forEach(str => {
+          str.forEach(el => {
+            executorsData.push(
+              {              
+              value: el.user.id,
+              label: el.user.name,
+              }
+            )
+          });          
+        })
       this.issue_executors = executorsData;
     } else {
       this.issue_executors = []
