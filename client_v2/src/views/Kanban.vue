@@ -1,5 +1,5 @@
-<template> 
-  <div> 
+<template>
+  <div>
     <CCard>
       <CCardBody v-if="showCarusel===true" class="c-app flex-row align-items-center">
         <div class="sk-grid">
@@ -17,7 +17,7 @@
     </CCard>
 
     <div v-if="showCarusel===false">
-      <CButton 
+      <CButton
         class="add_button"
         btn-lg
         color="success"
@@ -39,7 +39,7 @@
         </CNav>
       </CCol> -->
       <CCol>
-        <CSelect          
+        <CSelect
         label="Wykonawca"
         horizontal
         :value.sync="filterExecutor"
@@ -58,10 +58,10 @@
         </CButton>
       </CCol>
     </CRow>
-    <div class="task-board" v-if="showCarusel===false">      
+    <div class="task-board" v-if="showCarusel===false">
         <div class="task-column"
         v-for="column in kanban_data"
-        :key="column.id"            
+        :key="column.id"
         >
         <div>
           <div>
@@ -80,15 +80,23 @@
           </div>
           <tr>Przeterminowane 3</tr> -->
         </div>
-          <draggable :id="column.id" :key="column.id" :list="column.tasks" :animation="200" group="tasks" @change="columnChanged">
+          <draggable :delay="draggableConfig.delay"
+                     :touchStartThreshold="draggableConfig.touchStartThreshold"
+                     :id="column.id"
+                     :key="column.id"
+                     :list="column.tasks"
+                     :animation="200"
+                     group="tasks"
+                     class="draggable-container"
+                     @change="columnChanged">
               <!-- <CCard @dragend="updateKanban(task)" class="card text-white bg-success mb-3" style="width: 95%; bg-primary" -->
-                            
+
               <!-- <CCard class="card mb-3" style="width: 95%; bg-success" -->
             <CCard class="issue_card"
             v-for="(task) in column.tasks"
             :key="task.id"
             :task="task"
-            :column_id="column.id"                                            
+            :column_id="column.id"
             >
               <CCardHeader v-bind:class="[task.important_issue > 0 ? important_issue : normal_issue]">
                 <CRow>
@@ -124,7 +132,7 @@
                 </CRow>
               </CCardHeader>
               <CCardBody>
-                  <strong>{{task.project_name}}</strong>                    
+                  <strong>{{task.project_name}}</strong>
                   <div>{{task.issue_name}}</div>
               </CCardBody>
               <CCardFooter>
@@ -138,7 +146,7 @@
                 </CRow>
               </CCardFooter>
             </CCard>
-          </draggable> 
+          </draggable>
         </div>
     </div>
 
@@ -219,7 +227,7 @@
         <template #footer>
           <CButton v-if="issueIsFound" @click="addKanbanComment()" color="success">Zapisz zmiany</CButton>
           <CButton
-            color="info" 
+            color="info"
             @click="openInRedmine"
           >
             Otwórz w Redmine
@@ -230,13 +238,14 @@
       </CModal>
   </div>
 
-</div> 
+</div>
 
 </template>
 
 <script>
 import draggable from "vuedraggable";
 import generalFunctions from '../plugins/generalFunctions'
+import { throttle } from 'throttle-debounce';
 
 export default {
   name: "App",
@@ -245,13 +254,17 @@ export default {
   },
   data() {
     return {
-      showCarusel:true, 
+      draggableConfig: {
+        delay: 0,
+        threshold: 0,
+      },
+      showCarusel:true,
       issueIsFound:false,
       showTaskDetails:false,
       showNewTaskButton: true,
       showNewTask:false,
       issueToFind:null,
-      
+
       foundIssue:null,
       foundIssueProjectName:null,
       foundIssueDescription:null,
@@ -282,10 +295,16 @@ export default {
         console.log(err);
         this.showCarusel = false;
     });
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
   },
 
-computed: {
-         
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize)
+  },
+
+  computed: {
+
   important_issue: function () {
     return {
       'important_issue': true
@@ -300,6 +319,21 @@ computed: {
 },
 
   methods: {
+
+    onResize: throttle(1000, false, function (){
+      const isMobile = window.innerWidth <= 568;
+      if (isMobile) {
+        this.draggableConfig = {
+          delay: 200,
+          touchStartThreshold: 10
+        }
+      } else {
+        this.draggableConfig = {
+          delay: 0,
+          touchStartThreshold: 0
+        }
+      }
+    }),
 
   async toggleDetails(issue) {
 
@@ -320,15 +354,15 @@ computed: {
       this.foundIssueProjectName=currentIssue.data.issue.project.name;
       this.foundIssueDescription=currentIssue.data.issue.subject;
       this.issueIsFound = true;
-    } 
+    }
 
     const currentComments = await this.$store.dispatch("issues/findKanbanCommentsByIssueId", issueData);
 
     if (currentComments) {
       let commentsData = [];
-      currentComments.data.forEach(el => {        
+      currentComments.data.forEach(el => {
         commentsData.push(
-          {                       
+          {
             ...el
           },
         )
@@ -338,7 +372,7 @@ computed: {
       this.issue_comments = []
     }
 
-  },   
+  },
 
   async openInRedmine() {
     window.open('https://tasks.axioma.pl/issues/'+String(this.foundIssue.id));
@@ -347,11 +381,11 @@ computed: {
   cancelIssueModification() {
     this.showTaskDetails = false;
     this.showNewTaskButton = true;
-    this.foundIssueComment = '';    
+    this.foundIssueComment = '';
   },
 
   async findIssue(){
-    
+
     this.foundIssue = null;
     this.foundIssueProjectName=null;
     this.foundIssueDescription=null;
@@ -368,7 +402,7 @@ computed: {
       this.foundIssueProjectName=currentIssue.data.issue.project.name;
       this.foundIssueDescription=currentIssue.data.issue.subject;
       this.issueIsFound = true;
-    } 
+    }
   },
 
   async addKanbanComment() {
@@ -384,7 +418,7 @@ computed: {
 
       let presentInKanban = false;
       this.kanban_data.forEach(kanban_item => {
-        const kanbanRes = kanban_item.tasks.filter(el => 
+        const kanbanRes = kanban_item.tasks.filter(el =>
           Number(el.issue_id) === Number(this.foundIssue.issue_id)
         );
         if (kanbanRes.length > 0) {
@@ -393,7 +427,7 @@ computed: {
       })
       if (presentInKanban===false) {
         await this.$store.dispatch("issues/addKanbanComment", addData);
-      }      
+      }
     }
 
     this.issueToFind = null;
@@ -416,15 +450,15 @@ computed: {
         project_id:this.foundIssue.project.id,
         project_name:this.foundIssue.project.name,
         kanban_status_id:1,
-        executor_id: this.filterExecutor, 
-        executor_name: foundExecutor.label, 
+        executor_id: this.filterExecutor,
+        executor_name: foundExecutor.label,
         issue_id:this.foundIssue.id,
         issue_name:this.foundIssue.subject
       };
 
       let presentInKanban = false;
       this.kanban_data.forEach(kanban_item => {
-        const kanbanRes = kanban_item.tasks.filter(el => 
+        const kanbanRes = kanban_item.tasks.filter(el =>
           Number(el.issue_id) === Number(this.foundIssue.issue_id)
         );
         if (kanbanRes.length > 0) {
@@ -433,7 +467,7 @@ computed: {
       })
       if (presentInKanban===false) {
         await this.$store.dispatch("issues/addToKanban", addData);
-      }      
+      }
     }
 
     this.issueToFind = null;
@@ -454,7 +488,7 @@ computed: {
   },
 
  cancelNewTaskForm() {
-    
+
     this.foundIssue = null;
     this.issueToFind = null;
     this.foundIssueProjectName=null;
@@ -506,11 +540,11 @@ computed: {
       }
     }
   },
-  
+
   async initialize() {
 
     this.executorsList = await generalFunctions.redmineExecutorsList(this.$store);
-  
+
   },
 
   moveToBeginning(issue) {
@@ -518,7 +552,7 @@ computed: {
   },
 
   async makeChangesInRedmine(issueData) {
-    
+
     const currentProfile = this.$store.getters['profile/getProfile'];
 
     if (currentProfile) {
@@ -562,11 +596,11 @@ computed: {
   },
 
   async moveToAnotherStatus(issue,moveForward) {
-   
+
     let actionIsPossible = false;
-    let currentStatus = 0; 
+    let currentStatus = 0;
     let newStatus = 0;
-    
+
     if (issue) {
       currentStatus = Number(issue.kanban_status_id) - 1;
       if (moveForward===true) {
@@ -579,21 +613,21 @@ computed: {
     if ((currentStatus>=0&&currentStatus<=this.kanban_data.length-1)&&(newStatus>=0&&newStatus<=this.kanban_data.length-1)) {
       actionIsPossible = true;
     }
-    
+
     if (actionIsPossible) {
       const tasksFrom = this.kanban_data[currentStatus].tasks;
-      const tasksTo = this.kanban_data[newStatus].tasks;            
+      const tasksTo = this.kanban_data[newStatus].tasks;
       tasksTo.push({...issue,kanban_status_id:newStatus+1});
       const index = tasksFrom.indexOf(issue);
       if (index > -1) {
         tasksFrom.splice(index, 1);
 
-        const updateFilter = { 
-            where: 
-              { 
+        const updateFilter = {
+            where:
+              {
                   issue_id: issue.issue_id,
                   // executor_id: this.filterExecutor
-              } 
+              }
           };
         const updateContent = {
           kanban_status_id:newStatus+1
@@ -607,7 +641,7 @@ computed: {
         await this.makeChangesInRedmine(updateData);
 
       }
-    }        
+    }
   },
 
   moveBack(issue) {
@@ -623,24 +657,24 @@ computed: {
       console.log('index', index);
       if (index > -1) {
         tasksFrom.splice(index, 1);
-        const deleteFilter = { 
-            where: 
-              { 
+        const deleteFilter = {
+            where:
+              {
                   issue_id: issue.issue_id,
                   // executor_id: this.filterExecutor
-              } 
+              }
           };
         const updateData = {
           deleteFilter:JSON.stringify(deleteFilter),
         };
         await this.$store.dispatch("issues/deleteKanbanIssue", updateData, updateData);
 
-        const redmineUpdateFilter = { 
-            where: 
-              { 
+        const redmineUpdateFilter = {
+            where:
+              {
                   issue_id: issue.issue_id,
                   // executor_id: this.filterExecutor
-              } 
+              }
           };
         const redmineUpdateContent = {
           acceptIssue:true
@@ -662,23 +696,23 @@ async deleteTask(issue) {
       const index = tasksFrom.indexOf(issue);
       if (index > -1) {
         tasksFrom.splice(index, 1);
-        const deleteFilter = { 
-            where: 
-              { 
+        const deleteFilter = {
+            where:
+              {
                   issue_id: issue.issue_id,
                   executor_id: this.filterExecutor
-              } 
+              }
           };
         const updateData = {
           deleteFilter:JSON.stringify(deleteFilter),
         };
         await this.$store.dispatch("issues/deleteKanbanIssue", updateData, updateData);
 
-        const redmineUpdateFilter = { 
-            where: 
-              { 
+        const redmineUpdateFilter = {
+            where:
+              {
                   issue_id: issue.issue_id,
-              } 
+              }
           };
         const redmineUpdateContent = {
           kanban_status_id:6
@@ -695,12 +729,12 @@ async deleteTask(issue) {
 
   async makeTaskImportant(issue) {
 
-    const updateFilter = { 
-        where: 
-          { 
+    const updateFilter = {
+        where:
+          {
               issue_id: issue.issue_id,
               executor_id: this.filterExecutor
-          } 
+          }
       };
     const updateContent = {
       important_issue:1
@@ -710,7 +744,7 @@ async deleteTask(issue) {
       updateContent:JSON.stringify(updateContent)
     };
     await this.$store.dispatch("issues/updateKanbanIssue", updateData, updateData);
-    
+
   },
 
   async columnChanged(column) {
@@ -718,21 +752,21 @@ async deleteTask(issue) {
     let issue_id;
 
     this.kanban_data.forEach((el)=>
-      {     
+      {
         const foundTask = el.tasks.find(cTask => cTask.issue_id===column.removed?.element.issue_id);
         if (foundTask) {
           column_id = el.id;
-          issue_id = foundTask.issue_id;      
+          issue_id = foundTask.issue_id;
         }
       });
       if (column_id&&issue_id) {
 
-        const updateFilter = { 
-            where: 
-              { 
+        const updateFilter = {
+            where:
+              {
                   issue_id: issue_id,
                   // executor_id: this.filterExecutor
-              } 
+              }
           };
         const updateContent = {
           kanban_status_id:column_id
@@ -754,6 +788,12 @@ async deleteTask(issue) {
 
 <style src="spinkit/spinkit.min.css"></style>
 
+<style scoped>
+.draggable-container {
+  height: 100%;
+}
+</style>
+
 <style>
 
  .carusel-body{
@@ -762,26 +802,26 @@ async deleteTask(issue) {
 
  .panel-button {
     margin: 5px;
-     }  
+     }
 
 .issue_header {
     width: 95%;
     border-radius: 10px;
     background-color: ghostwhite;
-  }       
+  }
 
 .issue_card {
     width: 95%;
     border-radius: 15px;
-  }       
+  }
 
 .important_issue {
     background-color: lightsalmon;
-  }       
+  }
 
 .normal_issue {
     background-color: white;
-  }       
+  }
 
 .dropdown {
   list-style-type: none;
@@ -794,34 +834,34 @@ async deleteTask(issue) {
   bottom: 60px;
   right: 0;
   width: 300px;
-  border: 3px solid #73AD21;  
+  border: 3px solid #73AD21;
 }
 
 @media screen and (max-width: 4000px) {
   .task-board {
     position: relative;
-    display: flex; 
+    display: flex;
     flex-direction: row;
-    justify-content: space-around;    
-  }   
+    justify-content: space-around;
+  }
   .task-column {
     width: 25%;
-  }     
+  }
   .add_button {
     position: fixed;
     z-index:99999;
     bottom: 60px;
     right: 100px;
-  }      
+  }
 }
 
 @media screen and (max-width: 700px) {
   .task-board {
     position: relative;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     width: 100%;
-  }   
+  }
   .task-column {
     width: 100%;
   }
@@ -830,6 +870,6 @@ async deleteTask(issue) {
     z-index:99999;
     bottom: 60px;
     right: 20px;
-  }      
+  }
 }
 </style>
