@@ -11,6 +11,11 @@ module.exports = async (req, res, next) => {
             }
         }
         const users = await Model.findAll(filter);
+        if (users) {
+            users.forEach(el => {
+                el.redmine_api_key = '';            
+            });
+        }
         res.status(200).send(users);
     }  else {
         res.status(400).send({

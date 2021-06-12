@@ -1,15 +1,16 @@
-var Redmine = require('node-redmine');
- 
-// protocol required in Hostname, supports both HTTP and HTTPS
-var hostname = process.env.REDMINE_HOST;
-var config = {
-  apiKey: process.env.REDMINE_APIKEY
-};
- 
-var redmine = new Redmine(hostname, config);
-  
+var Redmine = require('node-redmine'); 
+const hostname = process.env.REDMINE_HOST;
+const apiKeyConfig = require('../../redmine/getApiKey');
+
 module.exports = async (req, res, next) => {
-    redmine.time_entries(req.body, function(err, data) {
+
+  const redmineApiKey = await apiKeyConfig(req.headers.authorization); 
+  const config = {
+      apiKey: redmineApiKey
+  };   
+  const redmine = new Redmine(hostname, config);
+
+  redmine.time_entries(req.body, function(err, data) {
     if (err) {
         res.status(400).send(data)
     };

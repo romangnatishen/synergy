@@ -89,7 +89,7 @@ export default {
         this.id = this.$route.params.dataObject.id;
         this.email = this.$route.params.dataObject.email;
         this.name = this.$route.params.dataObject.name;
-        this.apiKey = this.$route.params.dataObject.redmine_api_key;
+        // this.apiKey = this.$route.params.dataObject.redmine_api_key;
         this.user_status = this.$route.params.dataObject.user_status;
         }            
     }

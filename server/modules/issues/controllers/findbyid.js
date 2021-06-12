@@ -1,13 +1,16 @@
-var Redmine = require('node-redmine');
- 
-var hostname = process.env.REDMINE_HOST;
-var config = {
-  apiKey: process.env.REDMINE_APIKEY
-};
- 
-var redmine = new Redmine(hostname, config);
+const Redmine = require('node-redmine'); 
+const hostname = process.env.REDMINE_HOST;
+const apiKeyConfig = require('../../redmine/getApiKey');
   
 module.exports = async (req, res, next) => {
+    
+    const redmineApiKey = await apiKeyConfig(req.headers.authorization);
+    const config = {
+        apiKey: redmineApiKey
+    };
+    
+    const redmine = new Redmine(hostname, config);
+
     const redmineQuery = req.query.redmineQuery;
     redmine.get_issue_by_id(Number(req.query.taskId),redmineQuery, function(err, data) {
     if (err) {

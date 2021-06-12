@@ -16,6 +16,7 @@ module.exports = async (req, res, next) => {
     // }
 
     if (currenttUser&&accessAllowed===true) {
+        currenttUser.redmine_api_key = '';
         res.status(200).send(currenttUser);
     } else {
         res.status(200).send({message : 'Access is forbidden'})

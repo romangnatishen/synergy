@@ -7,7 +7,7 @@ export default {
 		profile: {
 			id: 0,
 			name: "",
-			redmine_api_key: "",
+			// redmine_api_key: "",
 			email: "",
 			role: 0,
 			user_status: 0,
@@ -93,8 +93,7 @@ export default {
 				return []
 			});
 			if (typeof response === "object" && response.status === 200) {
-//			commit("SET_ALL", parsedResponse);
-			return response;
+				return response;
 			}
 			return [];
 		},	

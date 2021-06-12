@@ -1,49 +1,64 @@
-<template>  
+<template> 
+  <div> 
+    <CCard>
+      <CCardBody v-if="showCarusel===true" class="c-app flex-row align-items-center">
+        <div class="sk-grid">
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+          <div class="sk-grid-cube"></div>
+        </div>
+    </CCardBody>
+    </CCard>
 
-  <div>
-    <CButton 
-      class="add_button"
-      btn-lg
-      color="success"
-      v-if="showNewTaskButton"
-      @click="showNewTaskForm()"
-      >
-      <CIcon name="cil-notes"/> Dodaj
-    </CButton>
-  <div>
-  <CRow >
-    <!-- <CCol>
-      <CNav variant="tabs">
-        <CNavItem active>
-          Potoczne
-        </CNavItem>
-        <CNavItem>
-          Projektowe
-        </CNavItem>
-      </CNav>
-    </CCol> -->
-    <CCol>
-      <CSelect          
-      label="Wykonawca"
-      horizontal
-      :value.sync="filterExecutor"
-      :options="executorsList"
-      />
-    </CCol>
-    <CCol>
-      <CButton
-        class="panel-button"
-        color="primary"
-        variant="outline"
-        square
-        size="sm"
-        @click="refreshKanban()"      >
-        Odśwież
+    <div v-if="showCarusel===false">
+      <CButton 
+        class="add_button"
+        btn-lg
+        color="success"
+        v-if="showNewTaskButton"
+        @click="showNewTaskForm()"
+        >
+        <CIcon name="cil-notes"/> Dodaj
       </CButton>
-    </CCol>
-  </CRow>
-  </div>
-    <div class="task-board">      
+    </div>
+    <CRow v-if="showCarusel===false">
+      <!-- <CCol>
+        <CNav variant="tabs">
+          <CNavItem active>
+            Potoczne
+          </CNavItem>
+          <CNavItem>
+            Projektowe
+          </CNavItem>
+        </CNav>
+      </CCol> -->
+      <CCol>
+        <CSelect          
+        label="Wykonawca"
+        horizontal
+        :value.sync="filterExecutor"
+        :options="executorsList"
+        />
+      </CCol>
+      <CCol>
+        <CButton
+          class="panel-button"
+          color="primary"
+          variant="outline"
+          square
+          size="sm"
+          @click="refreshKanban()"      >
+          Odśwież
+        </CButton>
+      </CCol>
+    </CRow>
+    <div class="task-board" v-if="showCarusel===false">      
         <div class="task-column"
         v-for="column in kanban_data"
         :key="column.id"            
@@ -164,58 +179,58 @@
       </template>
     </CModal>
 
-    <CModal
-      :show.sync="showTaskDetails"
-      :no-close-on-backdrop="true"
-      :centered="true"
-      title="Szczegóły zadania"
-      size="lg"
-      color="dark"
-    >
-    <CCardBody>
-      <b >{{foundIssueProjectName}}</b>
-      <h6>{{foundIssueDescription}}</h6>
-      <p></p>
-      <CTextarea
-      v-model="foundIssueComment"
-      placeholder="Wprowadż komentarz"
-      horizontal
-      rows="4"
-      />
+      <CModal
+        :show.sync="showTaskDetails"
+        :no-close-on-backdrop="true"
+        :centered="true"
+        title="Szczegóły zadania"
+        size="lg"
+        color="dark"
+      >
+      <CCardBody>
+        <b >{{foundIssueProjectName}}</b>
+        <h6>{{foundIssueDescription}}</h6>
+        <p></p>
+        <CTextarea
+        v-model="foundIssueComment"
+        placeholder="Wprowadż komentarz"
+        horizontal
+        rows="4"
+        />
 
-    <CDataTable
-      :items="issue_comments"
-      :fields="issue_comments_fields"
-      items-per-page-select
-      :items-per-page="5"
-      hover
-      sorter
-      pagination
-      table-filter
-      cleaner
-    >
-    </CDataTable>
+      <CDataTable
+        :items="issue_comments"
+        :fields="issue_comments_fields"
+        items-per-page-select
+        :items-per-page="5"
+        hover
+        sorter
+        pagination
+        table-filter
+        cleaner
+      >
+      </CDataTable>
 
-    </CCardBody>
-      <template #header>
-        <h6 class="modal-title">Szczegóły zadania</h6>
-        <CButtonClose @click="showTaskDetails = false" class="text-white"/>
-      </template>
-      <template #footer>
-        <CButton v-if="issueIsFound" @click="addKanbanComment()" color="success">Zapisz zmiany</CButton>
-        <CButton
-          color="info" 
-          @click="openInRedmine"
-        >
-          Otwórz w Redmine
-        </CButton>
+      </CCardBody>
+        <template #header>
+          <h6 class="modal-title">Szczegóły zadania</h6>
+          <CButtonClose @click="showTaskDetails = false" class="text-white"/>
+        </template>
+        <template #footer>
+          <CButton v-if="issueIsFound" @click="addKanbanComment()" color="success">Zapisz zmiany</CButton>
+          <CButton
+            color="info" 
+            @click="openInRedmine"
+          >
+            Otwórz w Redmine
+          </CButton>
 
-        <CButton @click="cancelIssueModification()" color="danger">Cofnij</CButton>
-      </template>
-    </CModal>
+          <CButton @click="cancelIssueModification()" color="danger">Cofnij</CButton>
+        </template>
+      </CModal>
+  </div>
 
-</div>
- 
+</div> 
 
 </template>
 
@@ -230,6 +245,7 @@ export default {
   },
   data() {
     return {
+      showCarusel:true, 
       issueIsFound:false,
       showTaskDetails:false,
       showNewTaskButton: true,
@@ -259,7 +275,13 @@ export default {
   },
 
   async created() {
-    await this.initialize();
+    this.showCarusel = true;
+    await this.initialize().then(() => {
+      this.showCarusel = false;
+    }).catch((err) => {
+        console.log(err);
+        this.showCarusel = false;
+    });
   },
 
 computed: {
@@ -730,7 +752,14 @@ async deleteTask(issue) {
 };
 </script>
 
+<style src="spinkit/spinkit.min.css"></style>
+
 <style>
+
+ .carusel-body{
+    margin: auto;
+  }
+
  .panel-button {
     margin: 5px;
      }  
