@@ -55,28 +55,22 @@ export default {
 		async projectMembers(payload,params) {
 			
 			let redmineParams = redmineConnection(this.getters,params);
-
+			redmineParams.offset = 0;
 			const data = requestDataHandler("GET",
 			`${hostSettings.DB_HOST}/project_members`,														
 			redmineParams, redmineParams);
 
 			const response = await axios(data);
 			if (response.status === 200) {
-				// params.status = 1;
 				let respArray = [];				
-				// console.log(response.data.projects);
-
 				respArray.push(response.data.memberships);
 				let iterationsNumber = response.data.total_count / response.data.limit;
 				iterationsNumber = Math.ceil(iterationsNumber) - 1;
 				for (let i = 1; i <= iterationsNumber; i++) {
-					params.offset = i*response.data.limit;
-					redmineParams = redmineConnection(this.getters,params);
-					// console.log('we are here');
+					redmineParams.offset = i*response.data.limit;
 					let nextData = requestDataHandler("GET",
 					`${hostSettings.DB_HOST}/project_members`,														
-					redmineParams, redmineParams);
-					
+					redmineParams, redmineParams);					
 					const nextResponse = await axios(nextData);
 					if (nextResponse.status === 200) {
 						respArray.push(nextResponse.data.memberships);
@@ -110,8 +104,6 @@ export default {
 			
 			const response = await axios(data);
 			
-			console.log(response);
-
 			if (response.status === 200) {
 				let params = {status:1};
 				let respArray = [];				

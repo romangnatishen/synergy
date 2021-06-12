@@ -7,12 +7,11 @@ var config = {
 var redmine = new Redmine(hostname, config);
   
 module.exports = async (req, res, next) => {
-  redmine.membership_by_project_id(req.query.id, {}, function(err, data) {
-    console.log('memberships query',req.query);    
+  redmine.membership_by_project_id(req.query.id, req.query, function(err, data) {
     if (err) {
       console.log(err);
       res.status(400).send(data)
     };
-        res.status(200).send(data);
+      res.status(200).send(data);
     });
 };
