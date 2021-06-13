@@ -2,20 +2,20 @@
   <CCard>
     <CCardHeader>
       <div>
-        <CIcon name="cil-task"/> Toasts
-        <a 
-          href="https://coreui.io/pro/vue/" 
-          rel="noreferrer noopener" 
-          target="_blank" 
+        <CIcon name="cil-task" /> Toasts
+        <a
+          href="https://coreui.io/pro/vue/"
+          rel="noreferrer noopener"
+          target="_blank"
           class="badge badge-danger ml-1"
         >
           CoreUI Pro
         </a>
         <div class="card-header-actions">
-          <a 
-            href="https://coreui.io/vue/docs/components/toast" 
-            class="card-header-action" 
-            rel="noreferrer noopener" 
+          <a
+            href="https://coreui.io/vue/docs/components/toast"
+            class="card-header-action"
+            rel="noreferrer noopener"
             target="_blank"
           >
             <small class="text-muted">docs</small>
@@ -63,29 +63,25 @@
             class="my-2"
           />
 
-          <CButton 
-            class="mr-1 w-25" 
-            color="success" 
-            @click="addToast()"
-          >
+          <CButton class="mr-1 w-25" color="success" @click="addToast()">
             Add toast
           </CButton>
         </CForm>
       </CCol>
       <CCol sm="12" lg="6">
         <div class="m-4">
-          <CToaster 
+          <CToaster
             v-for="(toaster, toasterKey) in toasters"
             :position="toasterKey"
             :key="'toaster' + toasterKey"
           >
             <template v-for="(toast, key) in toaster">
-              <CToast
-                :key="'toast' + key"
-                :show="true"
-                v-bind="toast"
-              >
-                {{`This is a toast in ${toasterKey} positioned toaster number ${key + 1}.`}}
+              <CToast :key="'toast' + key" :show="true" v-bind="toast">
+                {{
+                  `This is a toast in ${toasterKey} positioned toaster number ${
+                    key + 1
+                  }.`
+                }}
               </CToast>
             </template>
           </CToaster>
@@ -96,15 +92,14 @@
 </template>
 
 <script>
-
 export default {
   name: 'Toaster',
-  data () {
+  data() {
     return {
       toasts: [
-        { position: 'static', header: 'Toast title'},
-        { position: 'static', header: 'Toast title'},
-        { position: 'top-right', header: 'Toast title', autohide: 3000 }
+        { position: 'static', header: 'Toast title' },
+        { position: 'static', header: 'Toast title' },
+        { position: 'top-right', header: 'Toast title', autohide: 3000 },
       ],
       autohide: true,
       autohideValue: 5000,
@@ -114,39 +109,39 @@ export default {
       header: 'Toast title',
       positions: [
         'static',
-        'top-left', 
-        'top-center', 
-        'top-right', 
+        'top-left',
+        'top-center',
+        'top-right',
         'top-full',
         'bottom-left',
-        'bottom-center', 
+        'bottom-center',
         'bottom-right',
-        'bottom-full'
-      ]
-    }
+        'bottom-full',
+      ],
+    };
   },
   computed: {
-    toastConfig () {
+    toastConfig() {
       return {
         autohide: this.autohide ? this.autohideValue : false,
         closeButton: this.closeButton,
         fade: this.fade,
         position: this.position,
-        header: this.header
-      }
+        header: this.header,
+      };
     },
-    toasters () {
+    toasters() {
       return this.toasts.reduce((toasters, toast) => {
-        toasters[toast.position] = toasters[toast.position] || []
-        toasters[toast.position].push(toast)
-        return toasters
-      }, {})
-    }
+        toasters[toast.position] = toasters[toast.position] || [];
+        toasters[toast.position].push(toast);
+        return toasters;
+      }, {});
+    },
   },
   methods: {
-    addToast () {
-      this.toasts.push(this.toastConfig)
-    }
-  }
-}
+    addToast() {
+      this.toasts.push(this.toastConfig);
+    },
+  },
+};
 </script>

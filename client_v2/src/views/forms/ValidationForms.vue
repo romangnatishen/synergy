@@ -1,13 +1,15 @@
 <template>
   <CCard>
     <CCardHeader>
-      <CIcon name="cil-notes"/> Form Validation
-      <a class="badge badge-danger" href="https://coreui.io/pro/vue/">CoreUI Pro</a>
+      <CIcon name="cil-notes" /> Form Validation
+      <a class="badge badge-danger" href="https://coreui.io/pro/vue/"
+        >CoreUI Pro</a
+      >
       <div class="card-header-actions">
-        <a 
-          class="card-header-action" 
-          href="https://github.com/vuelidate/vuelidate" 
-          target="_blank" 
+        <a
+          class="card-header-action"
+          href="https://github.com/vuelidate/vuelidate"
+          target="_blank"
           rel="noreferrer noopener"
         >
           <small class="text-muted">docs</small>
@@ -15,16 +17,18 @@
       </div>
     </CCardHeader>
     <CCardBody>
-      <CLink 
-        href="https://github.com/vuelidate/vuelidate" 
-        target="_blank" 
+      <CLink
+        href="https://github.com/vuelidate/vuelidate"
+        target="_blank"
         rel="noreferrer noopener"
       >
         Vuelidate
-      </CLink> 
-      provides <cite>Simple, lightweight model-based validation for Vue.js. </cite>
-      In this view Vuelidate features are integrated with CoreUI Vue form components.
-      <hr>
+      </CLink>
+      provides
+      <cite>Simple, lightweight model-based validation for Vue.js. </cite>
+      In this view Vuelidate features are integrated with CoreUI Vue form
+      components.
+      <hr />
       <CRow>
         <CCol lg="6">
           <!--<h6>Simple Form</h6>-->
@@ -102,22 +106,22 @@
               custom
               class="mb-4"
             />
-            <CButton 
-              color="primary" 
+            <CButton
+              color="primary"
               :disabled="!isValid || submitted"
               @click="submit"
             >
               Submit
             </CButton>
-            <CButton 
-              class="ml-1"  
-              color="success" 
+            <CButton
+              class="ml-1"
+              color="success"
               :disabled="isValid"
               @click="validate"
             >
               Validate
             </CButton>
-            <CButton 
+            <CButton
               class="ml-1"
               color="danger"
               :disabled="!isDirty"
@@ -126,12 +130,12 @@
               Reset
             </CButton>
           </CForm>
-          <br/>
+          <br />
         </CCol>
 
         <CCol lg="6">
-          <CCard :class="`bg-${submitted ? 'info' : 'secondary' }`">
-            <pre>{{formString}}</pre>
+          <CCard :class="`bg-${submitted ? 'info' : 'secondary'}`">
+            <pre>{{ formString }}</pre>
           </CCard>
         </CCol>
       </CRow>
@@ -140,92 +144,107 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate"
-import { required, minLength, email, sameAs, helpers } from "vuelidate/lib/validators"
+import { validationMixin } from 'vuelidate';
+import {
+  required,
+  minLength,
+  email,
+  sameAs,
+  helpers,
+} from 'vuelidate/lib/validators';
 
 export default {
   name: 'ValidationForms',
   data() {
     return {
       form: this.getEmptyForm(),
-      submitted: false
-    }
+      submitted: false,
+    };
   },
   computed: {
-    formString () { return JSON.stringify(this.form, null, 4) },
-    isValid () { return !this.$v.form.$invalid },
-    isDirty () { return this.$v.form.$anyDirty },
+    formString() {
+      return JSON.stringify(this.form, null, 4);
+    },
+    isValid() {
+      return !this.$v.form.$invalid;
+    },
+    isDirty() {
+      return this.$v.form.$anyDirty;
+    },
   },
   mixins: [validationMixin],
   validations: {
     form: {
       firstName: {
         required,
-        minLength: minLength(3)
+        minLength: minLength(3),
       },
       lastName: {
         required,
-        minLength: minLength(2)
+        minLength: minLength(2),
       },
       userName: {
         required,
-        minLength: minLength(5)
+        minLength: minLength(5),
       },
       email: {
         required,
-        email
+        email,
       },
       password: {
         required,
         minLength: minLength(8),
-        strongPass: helpers.regex('strongPass', /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+        strongPass: helpers.regex(
+          'strongPass',
+          /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/
+        ),
       },
       confirmPassword: {
         required,
-        sameAsPassword: sameAs("password")
+        sameAsPassword: sameAs('password'),
       },
       accept: {
         required,
-        mustAccept: val => val
-      }
-    }
+        mustAccept: (val) => val,
+      },
+    },
   },
   methods: {
-    checkIfValid (fieldName) {
-      const field = this.$v.form[fieldName]
+    checkIfValid(fieldName) {
+      const field = this.$v.form[fieldName];
       if (!field.$dirty) {
-        return null
-      } 
-      return !(field.$invalid || field.$model === '')
+        return null;
+      }
+      return !(field.$invalid || field.$model === '');
     },
 
-    submit () {
+    submit() {
       if (this.isValid) {
-        this.submitted = true
+        this.submitted = true;
       }
     },
 
-    validate () {
-      this.$v.$touch()
+    validate() {
+      this.$v.$touch();
     },
 
-    reset () {
-      this.form = this.getEmptyForm()
-      this.submitted = false
-      this.$v.$reset()
+    reset() {
+      this.form = this.getEmptyForm();
+      this.submitted = false;
+      this.$v.$reset();
     },
-    
-    getEmptyForm () {
+
+    getEmptyForm() {
       return {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        accept: false
-      }
-    }
-  }
-}
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        accept: false,
+      };
+    },
+  },
+};
 </script>

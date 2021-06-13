@@ -8,10 +8,7 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img
-            src="img/avatars/6.jpg"
-            class="c-avatar-img "
-          />
+          <img src="img/avatars/6.jpg" class="c-avatar-img" />
         </div>
       </CHeaderNavLink>
     </template>
@@ -34,11 +31,7 @@
       <CIcon name="cil-comment-square" /> Comments
       <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownHeader
-      tag="div"
-      class="text-center"
-      color="light"
-    >
+    <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Settings</strong>
     </CDropdownHeader>
     <CDropdownItem @click="goToUserProfile()">
@@ -55,7 +48,7 @@
       <CIcon name="cil-file" /> Projects
       <CBadge color="primary" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownDivider/>
+    <CDropdownDivider />
     <!-- <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
     </CDropdownItem> -->
@@ -68,39 +61,36 @@
 <script>
 export default {
   name: 'TheHeaderDropdownAccnt',
-  data () {
-    return { 
-      itemsCount: 0
-    }
+  data() {
+    return {
+      itemsCount: 0,
+    };
   },
- methods: {
-    logOut(){
-        localStorage.clear();
-        this.$store.dispatch("profile/cleanProfile");        
-        this.$router.push({ name: "Login" });
+  methods: {
+    logOut() {
+      localStorage.clear();
+      this.$store.dispatch('profile/cleanProfile');
+      this.$router.push({ name: 'Login' });
     },
-   async goToUserProfile() {      
-      
-    const currentProfile = this.$store.getters['profile/getProfile'];
-    if (currentProfile) {
-        const dataObject = await this.$store.dispatch("profile/findByPk",
-        {
+    async goToUserProfile() {
+      const currentProfile = this.$store.getters['profile/getProfile'];
+      if (currentProfile) {
+        const dataObject = await this.$store.dispatch('profile/findByPk', {
           params: {
-            id:Number(currentProfile.id),
-          }
-        }
-      );
+            id: Number(currentProfile.id),
+          },
+        });
         if (dataObject) {
-          this.$router.push({ name: "UserForm" , params:{dataObject}});
-        }    
-    }
- },
- }
-}
+          this.$router.push({ name: 'UserForm', params: { dataObject } });
+        }
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .c-icon {
-    margin-right: 0.3rem;
-  }
+.c-icon {
+  margin-right: 0.3rem;
+}
 </style>

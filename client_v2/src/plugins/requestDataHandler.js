@@ -13,10 +13,9 @@
  * @var {Boolean} isId
  * @return {Object}
  */
-import {DeviceUUID} from 'device-uuid';
+import { DeviceUUID } from 'device-uuid';
 
 export default (method, url, data, params, headers) => {
-
   const access_token = localStorage.getItem('access_token');
   const isData = data !== '' && data !== undefined;
   const isParams = params !== '' && params !== undefined;
@@ -24,35 +23,32 @@ export default (method, url, data, params, headers) => {
   const device_uuid = new DeviceUUID().get();
 
   if (access_token) {
-
     const apiKey = localStorage.getItem('x-api-key');
     const authorizationStr = `Bearer ${access_token}`;
-    
-    requestData = {
-    method,
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      'authorization':authorizationStr,
-      'device_uuid':device_uuid,
-      'x-access-token': access_token,
-      'x-api-key': apiKey,
-      ...headers
-     }
-    };
 
+    requestData = {
+      method,
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: authorizationStr,
+        device_uuid: device_uuid,
+        'x-access-token': access_token,
+        'x-api-key': apiKey,
+        ...headers,
+      },
+    };
   } else {
     requestData = {
-    method,
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      ...headers
-     }
+      method,
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
     };
-
   }
- 
+
   if (isData) {
     requestData.data = data;
     const isId = data.id === '' || data.id === undefined;
@@ -60,11 +56,11 @@ export default (method, url, data, params, headers) => {
       delete data.id;
     }
   }
-    
+
   if (isParams) {
     // console.log("header params");
     // console.log(params);
-      
+
     requestData.params = params;
   }
 

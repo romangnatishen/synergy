@@ -3,8 +3,9 @@
     color-scheme="light"
     :minimize="minimized"
     :show="show"
-    @update:show="(value) => $store.commit('interfaceSettings/set', ['sidebarShow', value])"
-
+    @update:show="
+      (value) => $store.commit('interfaceSettings/set', ['sidebarShow', value])
+    "
   >
     <CSidebarBrand class="d-md-down-none" to="/apps/email">
       <CIcon
@@ -35,18 +36,9 @@
         name="Inbox"
         :badge="{ text: 4, color: 'danger' }"
       />
-      <CSidebarNavItem
-        icon="cil-star"
-        name="Stared"
-      />
-      <CSidebarNavItem
-        icon="cil-paper-plane"
-        name="Sent"
-      />
-      <CSidebarNavItem
-        icon="cil-trash"
-        name="Trash"
-      />
+      <CSidebarNavItem icon="cil-star" name="Stared" />
+      <CSidebarNavItem icon="cil-paper-plane" name="Sent" />
+      <CSidebarNavItem icon="cil-trash" name="Trash" />
       <CSidebarNavItem
         icon="cil-bookmark"
         name="Important"
@@ -75,25 +67,25 @@
 <script>
 export default {
   name: 'EmailSidebar',
-  data () {
+  data() {
     return {
-      minimized: false
-    }
+      minimized: false,
+    };
   },
 
- computed: {
-    darkMode () {
-    return false;
-    // return this.$store.getters['store/state'].darkMode; 
-    },
-    show () {
+  computed: {
+    darkMode() {
       return false;
-      //return this.$store.getters['store/state'].sidebarShow; 
+      // return this.$store.getters['store/state'].darkMode;
     },
-    minimize () {
+    show() {
       return false;
-      // return this.$store.getters['store/state'].sidebarMinimize; 
-    }
-  }
-}
+      //return this.$store.getters['store/state'].sidebarShow;
+    },
+    minimize() {
+      return false;
+      // return this.$store.getters['store/state'].sidebarMinimize;
+    },
+  },
+};
 </script>

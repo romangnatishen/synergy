@@ -1,37 +1,37 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import VueRouter from 'vue-router'
-import CoreuiVue from '@coreui/vue-pro'
-import User from '@/views/users/User'
-import appRouter from '@/router'
+import { mount, createLocalVue } from '@vue/test-utils';
+import VueRouter from 'vue-router';
+import CoreuiVue from '@coreui/vue-pro';
+import User from '@/views/users/User';
+import appRouter from '@/router';
 
-const localVue = createLocalVue()
-localVue.use(VueRouter)
-const router = appRouter
-router.push({path: '/users/1'})
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+const router = appRouter;
+router.push({ path: '/users/1' });
 
-localVue.use(CoreuiVue)
+localVue.use(CoreuiVue);
 
 describe('User.vue', () => {
-  let wrapper
+  let wrapper;
   beforeEach(() => {
     wrapper = mount(User, {
       localVue,
-      router
-    })
-  })
+      router,
+    });
+  });
   it('has a name', () => {
-    expect(User.name).toBe('User')
-  })
+    expect(User.name).toBe('User');
+  });
   it('is Vue instance', () => {
-    expect(wrapper.vm).toBeTruthy()
-  })
+    expect(wrapper.vm).toBeTruthy();
+  });
   it('is User', () => {
-    expect(wrapper.findComponent(User)).toBeTruthy()
-  })
+    expect(wrapper.findComponent(User)).toBeTruthy();
+  });
   it('should have methods', () => {
-    expect(typeof User.methods.goBack).toEqual('function')
-  })
+    expect(typeof User.methods.goBack).toEqual('function');
+  });
   test('renders correctly', () => {
-    expect(wrapper.element).toMatchSnapshot()
-  })
-})
+    expect(wrapper.element).toMatchSnapshot();
+  });
+});

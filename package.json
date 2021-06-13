@@ -1,0 +1,20 @@
+{
+  "name": "synergy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:romangnatishen/synergy.git",
+  "author": "r.gnatishen@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.js": [
+      "./client_v2/node_modules/.bin/eslint"
+    ],
+    "*.vue": [
+      "./client_v2/node_modules/.bin/eslint"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0"
+  }
+}

@@ -1,43 +1,43 @@
-import CoreuiVue from '@coreui/vue-pro'
+import CoreuiVue from '@coreui/vue-pro';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-import TheContainer from '@/containers/TheContainer'
+import VueRouter from 'vue-router';
+import Vuex from 'vuex';
+import TheContainer from '@/containers/TheContainer';
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(VueRouter)
-localVue.use(CoreuiVue)
+const localVue = createLocalVue();
+localVue.use(Vuex);
+localVue.use(VueRouter);
+localVue.use(CoreuiVue);
 
 const store = new Vuex.Store({
   state: {
     sidebarShow: 'responsive',
     sidebarMinimize: false,
     asideShow: false,
-    darkMode: false
-  }
-})
+    darkMode: false,
+  },
+});
 
-const router = new VueRouter()
+const router = new VueRouter();
 
 describe('TheContainer.vue', () => {
   it('has a name', () => {
-    expect(TheContainer.name).toBe('TheContainer')
-  })
+    expect(TheContainer.name).toBe('TheContainer');
+  });
   test('renders correctly', () => {
     const wrapper = shallowMount(TheContainer, {
       store,
       localVue,
-      router
-    })
-    expect(wrapper.element).toMatchSnapshot()
-  })
+      router,
+    });
+    expect(wrapper.element).toMatchSnapshot();
+  });
   it('is Vue instance', () => {
     const wrapper = shallowMount(TheContainer, {
       store,
       localVue,
-      router
-    })
-    expect(wrapper.vm).toBeTruthy()
-  })
-})
+      router,
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
+});

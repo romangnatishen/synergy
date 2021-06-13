@@ -1,20 +1,20 @@
-import Vue from 'vue'
-import { shallowMount } from '@vue/test-utils'
-import CoreuiVue from '@coreui/vue-pro'
-import Flags from '@/views/icons/Flags'
+import Vue from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import CoreuiVue from '@coreui/vue-pro';
+import Flags from '@/views/icons/Flags';
 
-Vue.use(CoreuiVue)
+Vue.use(CoreuiVue);
 
 describe('Flags.vue', () => {
   it('has a name', () => {
-    expect(Flags.name).toBe('Flags')
-  })
+    expect(Flags.name).toBe('Flags');
+  });
   it('is Vue instance', () => {
-    const wrapper = shallowMount(Flags)
-    expect(wrapper.vm).toBeTruthy()
-  })
+    const wrapper = shallowMount(Flags);
+    expect(wrapper.vm).toBeTruthy();
+  });
   it('is Flags', () => {
-    const wrapper = shallowMount(Flags)
-    expect(wrapper.findComponent(Flags)).toBeTruthy()
-  })
-})
+    const wrapper = shallowMount(Flags);
+    expect(wrapper.findComponent(Flags)).toBeTruthy();
+  });
+});
