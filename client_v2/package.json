@@ -87,7 +87,11 @@
     "sass-loader": "~9.0.3",
     "vue-template-compiler": "~2.6.12"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 10"],
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ],
   "husky": {
     "hooks": {
       "pre-push": "yarn lint-staged",
@@ -95,8 +99,12 @@
     }
   },
   "lint-staged": {
-    "*.js": ["./node_modules/.bin/eslint"],
-    "*.vue": ["./node_modules/.bin/eslint"]
+    "*.js": [
+      "./node_modules/.bin/eslint"
+    ],
+    "*.vue": [
+      "./node_modules/.bin/eslint"
+    ]
   },
   "homepage": "http://coreui.io",
   "license": "https://coreui.io/pro/license/",

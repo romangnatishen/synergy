@@ -41,7 +41,8 @@
         />
         <CForm inline class="date-rows">
           <CInput
-            class="date-items"
+            class="date-items date-input__date"
+            add-wrapper-classes="col-12 col-s-12"
             label="Od"
             v-model="dateFrom"
             type="date"
@@ -50,17 +51,17 @@
           <CSelect
             :options="hoursArray"
             :value.sync="start_hours"
-            add-wrapper-classes="ml-2"
+            class="date-input__hours"
           />
           <CSelect
             :options="minutesArray"
             :value.sync="start_minutes"
-            add-wrapper-classes="ml-2"
+            class="date-input__minutes"
           />
         </CForm>
         <CForm inline class="date-rows">
           <CInput
-            class="date-items"
+            class="date-items date-input__date"
             label="Do"
             v-model="dateTo"
             type="date"
@@ -69,12 +70,12 @@
           <CSelect
             :options="hoursArray"
             :value.sync="end_hours"
-            add-wrapper-classes="ml-2"
+            class="date-input__hours"
           />
           <CSelect
             :options="minutesArray"
             :value.sync="end_minutes"
-            add-wrapper-classes="ml-2"
+            class="date-input__minutes"
           />
         </CForm>
         <CRow class="switch-items">
@@ -100,6 +101,7 @@
           clickable-rows
           hover
           @row-clicked="rowClicked"
+          class="other-participants"
         >
           <template #select="{ item }">
             <td>
@@ -119,8 +121,8 @@
       <template #footer>
         <CButton @click="saveEvent()" color="success">Zapisz zmiany</CButton>
         <CButton @click="cancelEventModification" color="danger"
-          >Cofnij</CButton
-        >
+          >Cofnij
+        </CButton>
       </template>
     </CModal>
 
@@ -143,7 +145,8 @@
         />
 
         <CButton color="success" @click="addNewEvent()">
-          <CIcon name="cil-notes" /> Dodaj wydarzenie
+          <CIcon name="cil-notes" />
+          Dodaj wydarzenie
         </CButton>
       </CForm>
     </CCardHeader>
@@ -195,99 +198,6 @@ import 'vue-datetime/dist/vue-datetime.css';
 import generalFunctions from '../plugins/generalFunctions';
 
 const currDate = new Date();
-const currYear = currDate.getFullYear();
-const currMonth = currDate.getMonth();
-
-// const sampleEvents = [
-//   {
-//     title: 'All Day Event very long title',
-//     allDay: true,
-//     startDate: new Date(currYear, currMonth, 0),
-//     endDate: new Date(currYear, currMonth, 1),
-//   },
-//   {
-//     title: 'Long Event',
-//     startDate: new Date(currYear, currMonth, 7),
-//     endDate: new Date(currYear, currMonth, 10),
-//   },
-
-//   {
-//     title: 'DTS STARTS',
-//     startDate: new Date(currYear + 1, 2, 13, 0, 0, 0),
-//     endDate: new Date(currYear + 1, 2, 20, 0, 0, 0),
-//   },
-
-//   {
-//     title: 'DTS ENDS',
-//     startDate: new Date(currYear + 1, 10, 6, 0, 0, 0),
-//     endDate: new Date(currYear + 1, 10, 13, 0, 0, 0),
-//   },
-
-//   {
-//     title: 'Some Event',
-//     startDate: new Date(currYear, currMonth, 9, 0, 0, 0),
-//     endDate: new Date(currYear, currMonth, 9, 0, 0, 0),
-//   },
-//   {
-//     title: 'Conference',
-//     startDate: new Date(currYear, currMonth, 11),
-//     endDate: new Date(currYear, currMonth, 13),
-//     desc: 'Big conference for important people',
-//     classes: 'orange'
-//   },
-//   {
-//     title: 'Meeting',
-//     startDate: new Date(currYear, currMonth, 12, 10, 30, 0, 0),
-//     endDate: new Date(currYear, currMonth, 12, 12, 30, 0, 0),
-//     desc: 'Pre-meeting meeting, to prepare for the meeting',
-//   },
-//   {
-//     title: 'Lunch',
-//     startDate: new Date(currYear, currMonth, 12, 12, 0, 0, 0),
-//     endDate: new Date(currYear, currMonth, 12, 13, 0, 0, 0),
-//     desc: 'Power lunch',
-//   },
-//   {
-//     title: 'Meeting',
-//     startDate: new Date(currYear, currMonth, 14, 14, 0, 0, 0),
-//     endDate: new Date(currYear, currMonth, 14, 15, 0, 0, 0),
-//   },
-//   {
-//     title: 'Happy Hour',
-//     startDate: new Date(currYear, currMonth, 12, 17, 0, 0, 0),
-//     endDate: new Date(currYear, currMonth, 12, 17, 30, 0, 0),
-//     desc: 'Most important meal of the day',
-//     classes: 'primary'
-//   },
-//   {
-//     title: 'Dinner',
-//     startDate: new Date(currYear, currMonth, 26, 20, 0, 0, 0),
-//     endDate: new Date(currYear, currMonth, 26, 21, 0, 0, 0),
-//     classes: 'success'
-//   },
-//   {
-//     title: 'Birthday Party',
-//     startDate: new Date(currYear, currMonth, 13, 7, 0, 0),
-//     endDate: new Date(currYear, currMonth, 13, 10, 30, 0),
-//   },
-//   {
-//     title: 'Birthday Party 2',
-//     startDate: new Date(currYear, currMonth, 24, 17, 0, 0),
-//     endDate: new Date(currYear, currMonth, 24, 18, 30, 0),
-//     classes: 'primary'
-//   },
-//   {
-//     title: 'Late Night Event',
-//     startDate: new Date(currYear, currMonth, 17, 19, 30, 0),
-//     endDate: new Date(currYear, currMonth, 18, 2, 0, 0),
-//     classes: 'danger'
-//   },
-//   {
-//     title: 'Multi-day Event',
-//     startDate: new Date(currYear, currMonth, 20, 19, 30, 0),
-//     endDate: new Date(currYear, currMonth, 22, 2, 0, 0),
-//   }
-// ]
 
 export default {
   name: 'Calendar',
@@ -536,7 +446,7 @@ export default {
 
 <style src="spinkit/spinkit.min.css"></style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../assets/scss/style';
 
 .carusel-body {
@@ -549,17 +459,49 @@ export default {
 }
 
 .switch-items {
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 0;
+
+  @media screen and(max-width: 568px) {
+    margin-left: -5px;
+  }
 }
+
 .switch-description {
   margin-left: 10px;
   vertical-align: middle;
+  margin-bottom: 0;
 }
 
 .date-items {
   margin-right: 20px;
+  @media screen and (max-width: 568px) {
+    margin-right: 0;
+  }
+}
+
+.date-input {
+  &__date {
+    @media screen and (max-width: 568px) {
+      width: calc(100% + 5px);
+    }
+  }
+
+  &__hours {
+    margin-left: 0.5rem;
+    @media screen and (max-width: 568px) {
+      margin: 0;
+    }
+  }
+
+  &__minutes {
+    margin-left: 0.5rem;
+    @media screen and (max-width: 568px) {
+      margin: 0.5rem;
+    }
+  }
 }
 
 .header-items {
@@ -567,50 +509,62 @@ export default {
   margin-right: 10px;
   vertical-align: middle;
 }
+
 #calendar {
   color: $body-color;
   height: 63vh;
   margin-left: auto;
   margin-right: auto;
 }
+
 .theme-default .cv-event {
   background-color: #c8ced3;
   border-color: $table-border-color;
   color: $body-color;
 }
+
 .theme-default .cv-event.success {
   background-color: $success;
   border-color: lighten($success, 5%);
 }
+
 .theme-default .cv-event.danger {
   background-color: $danger;
 }
+
 .theme-default .cv-event.primary {
   background-color: #20a8d8;
 }
+
 .theme-default .cv-event.orange {
   background-color: #f8cb00;
   border-color: lighten(#f8cb00, 5%);
 }
+
 .theme-default .cv-day.today {
   background-color: $gray-300;
 }
+
 .theme-default .cv-day.today > .cv-day-number {
   background-color: #20a8d8;
   border-radius: 50%;
   position: absolute;
   left: 0;
 }
+
 .theme-default .cv-day.past {
   background-color: $body-bg;
 }
+
 .theme-default .cv-day.outsideOfMonth {
   background-color: $body-bg;
 }
+
 .theme-default .cv-weeks,
 .theme-default .cv-day {
   border-color: $table-border-color;
 }
+
 .theme-default .cv-header,
 .theme-default .cv-header-days,
 .theme-default .cv-header-day {
@@ -618,12 +572,20 @@ export default {
   border-color: $table-border-color;
   border-style: solid;
 }
+
 .theme-default .cv-header-nav > button {
   color: $body-color;
   background-color: $input-bg;
   border-color: $input-border-color;
 }
+
 .theme-default .cv-day.draghover {
   box-shadow: inset 0 0 0.2em 0.2em #321fdb;
+}
+
+.other-participants {
+  ::v-deep .row div {
+    margin-top: auto;
+  }
 }
 </style>
