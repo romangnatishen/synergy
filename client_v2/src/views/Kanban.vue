@@ -116,10 +116,10 @@
               <CCardFooter>
                 <CRow>
                   <CCol>
-                    01.03.2021
+                    {{task.due_date}}
                   </CCol>
                   <CCol>
-                    10h
+                    {{task.estimated_hours}}
                   </CCol>
                 </CRow>
               </CCardFooter>
@@ -498,11 +498,29 @@ export default {
       const dataArray = kanbanIssueList.data;
       if (dataArray) {
         let tasks = [];
-        dataArray.forEach(el => {
+        for await (let el of dataArray) {
+        // dataArray.forEach(el => {
           let important_issue = 0;
           if (el.important_issue != null) {
             important_issue = el.important_issue
             }
+
+          const issueData = {
+            taskId: Number(el.issue_id).toString(),
+            redmineQuery: {}
+          };
+          const currentIssue = await this.$store.dispatch("issues/getIssue", issueData);
+          let estimated_hours; let due_date;
+          if (currentIssue) {
+            estimated_hours = currentIssue.data?.issue?.estimated_hours;
+            due_date = currentIssue.data?.issue?.due_date;
+          }
+          if (!estimated_hours) {
+            estimated_hours = 'brak';
+          }
+          if (!due_date) {
+            due_date = 'brak';
+          }
           tasks.push(
             {
               id: el.id,
@@ -510,10 +528,12 @@ export default {
               issue_id: el.issue_id,
               issue_name: el.issue_name,
               project_name: el.project_name,
-              important_issue: important_issue
+              important_issue: important_issue,
+              estimated_hours:estimated_hours,
+              due_date:due_date
             }
           );
-        })
+        }
         kanbanItem.tasks = tasks;
       }
     }
@@ -631,8 +651,6 @@ export default {
       const currentStatus = Number(issue.kanban_status_id) - 1;
       const tasksFrom = this.kanban_data[currentStatus].tasks;
       const index = tasksFrom.indexOf(issue);
-      console.log('task from', tasksFrom);
-      console.log('index', index);
       if (index > -1) {
         tasksFrom.splice(index, 1);
         const deleteFilter = {

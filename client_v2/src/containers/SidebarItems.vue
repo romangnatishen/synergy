@@ -36,7 +36,7 @@ export default {
               icon: 'cil-input-power',
               items: [
                 {
-                  name: 'Calendar',
+                  name: 'Kalendarz',
                   to: '/calendar',
                   icon: 'cil-calendar',
                 },
