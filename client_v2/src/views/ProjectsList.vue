@@ -1,5 +1,36 @@
 <template>
   <CCard>
+    <CModal
+      :show.sync="projectDetailsVisible"
+      :no-close-on-backdrop="true"
+      :centered="true"
+      title="Szczegóły projektu"
+      size="lg"
+      color="dark"
+    >
+      <CCardBody>
+        <CDataTable
+          :items="project_details"
+          :fields="project_details_fields"
+          items-per-page-select
+          :items-per-page="5"
+          hover
+          sorter
+          pagination
+          table-filter
+          cleaner
+        >
+        </CDataTable>
+      </CCardBody>
+      <template #header>
+        <h6 class="modal-title">Szczegóły projektu</h6>
+        <CButtonClose
+          @click="projectDetailsVisible === false"
+          class="text-white"
+        />
+      </template>
+    </CModal>
+
     <CCardBody
       v-if="showCarusel === true"
       class="c-app flex-row align-items-center"
@@ -16,7 +47,6 @@
         <div class="sk-grid-cube"></div>
       </div>
     </CCardBody>
-
     <CCardBody>
       <CDataTable
         :items="dataArray"
@@ -30,13 +60,6 @@
         table-filter
         cleaner
       >
-        <!-- <template #status="{item}">
-          <td>
-            <CBadge :color="getBadge(item.status)">
-              {{item.status}}
-            </CBadge>
-          </td>
-        </template> -->
         <template #id="{ item }">
           <td class="py-2">
             <CButton
@@ -47,6 +70,19 @@
               @click="goToProject(item.id)"
             >
               {{ item.id }}
+            </CButton>
+          </td>
+        </template>
+        <template #name="{ item }">
+          <td class="py-2">
+            <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="showProjectDetails(item.id)"
+            >
+              {{ item.name }}
             </CButton>
           </td>
         </template>
@@ -76,6 +112,9 @@ export default {
 
   data() {
     return {
+      projectDetailsVisible: false,
+      project_details: [],
+      project_details_fields: [],
       showCarusel: true,
       dataArray: [],
       // dataArray: usersData.map((item, id) => { return {...item, id}}),
@@ -139,6 +178,27 @@ export default {
       }
     },
 
+    async showProjectDetails(projectId) {
+      this.projectDetailsVisible = true;
+      const dataObject = await this.$store.dispatch('issues/findAll', {
+        project_id: projectId,
+        include: 'journals',
+        status_id: 'open',
+      });
+
+      const params = {
+        where: {
+          project_id: projectId,
+        },
+      };
+      const kanbanTasks = await this.$store.dispatch(
+        'issues/getKanbanIssueByProject',
+        params
+      );
+
+      console.log('project tasks', dataObject);
+      console.log('kanban tasks', kanbanTasks);
+    },
     toggleDetails(item) {
       this.$set(this.dataArray[item.id], '_toggled', !item._toggled);
       this.collapseDuration = 300;
