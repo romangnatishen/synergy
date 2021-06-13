@@ -1,17 +1,13 @@
 <template>
   <CHeader with-subheader>
-    <CToggler
-      in-header
-      class="ml-3 d-lg-none"
-      @click="toggleSidebarMobile()"
-    />
+    <CToggler in-header class="ml-3 d-lg-none" @click="toggleSidebarMobile()" />
     <CToggler
       in-header
       class="ml-3 d-md-down-none"
       @click="toggleSidebarDesktop()"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-       <!-- <CImg
+      <!-- <CImg
         src="/static/axioma_black.png"
         width="100px"
         height="35px"
@@ -21,20 +17,16 @@
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/dashboard">
-          Pulpit
-        </CHeaderNavLink>
+        <CHeaderNavLink to="/dashboard"> Pulpit </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/userslist" exact>
-          Użytkownicy
-        </CHeaderNavLink>
+        <CHeaderNavLink to="/userslist" exact> Użytkownicy </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>
 
     <CHeaderNav>
       <CHeaderNavItem class="px-3 c-d-legacy-none">
-        <TheHeaderDropdownAccnt/>
+        <TheHeaderDropdownAccnt />
       </CHeaderNavItem>
     </CHeaderNav>
 
@@ -71,7 +63,7 @@
 </template>
 
 <script>
-import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt';
 // import TheHeaderDropdownNotif from './TheHeaderDropdownNotif'
 // import TheHeaderDropdownTasks from './TheHeaderDropdownTasks'
 // import TheHeaderDropdownMssgs from './TheHeaderDropdownMssgs'
@@ -93,21 +85,21 @@ export default {
     toggleDarkMode() {
       return this.$store.commit('interfaceSettings/toggle', 'darkMode');
     },
-    toggleSidebarDesktop() {      
+    toggleSidebarDesktop() {
       // console.log("desktop works");
       return this.$store.commit('interfaceSettings/toggleSidebarDesktop');
     },
     toggleAsideShow() {
-        this.$store.commit('interfaceSettings/toggle', 'asideShow');
-        return this.$store.state['interfaceSettings'].asideShow;
-    },    
+      this.$store.commit('interfaceSettings/toggle', 'asideShow');
+      return this.$store.state['interfaceSettings'].asideShow;
+    },
   },
 
   computed: {
-    darkMode () {
+    darkMode() {
       return false;
-      // return this.$store.getters['store/state'].darkMode; 
+      // return this.$store.getters['store/state'].darkMode;
     },
-  }  
-}
+  },
+};
 </script>

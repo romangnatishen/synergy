@@ -1,22 +1,22 @@
-import Vue from 'vue'
-import { shallowMount } from '@vue/test-utils'
-import CoreuiVue from '@coreui/vue-pro'
-import ButtonGroups from '@/views/buttons/ButtonGroups'
+import Vue from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import CoreuiVue from '@coreui/vue-pro';
+import ButtonGroups from '@/views/buttons/ButtonGroups';
 
-Vue.use(CoreuiVue)
+Vue.use(CoreuiVue);
 
 describe('ButtonGroups.vue', () => {
-  const wrapper = shallowMount(ButtonGroups)
+  const wrapper = shallowMount(ButtonGroups);
   it('has a name', () => {
-    expect(ButtonGroups.name).toBe('ButtonGroups')
-  })
+    expect(ButtonGroups.name).toBe('ButtonGroups');
+  });
   it('is Vue instance', () => {
-    expect(wrapper.vm).toBeTruthy()
-  })
+    expect(wrapper.vm).toBeTruthy();
+  });
   it('is ButtonGroups', () => {
-    expect(wrapper.findComponent(ButtonGroups)).toBeTruthy()
-  })
+    expect(wrapper.findComponent(ButtonGroups)).toBeTruthy();
+  });
   test('renders correctly', () => {
-    expect(wrapper.element).toMatchSnapshot()
-  })
-})
+    expect(wrapper.element).toMatchSnapshot();
+  });
+});

@@ -59,7 +59,7 @@
                 </CCol>
               </CRow>
             </CForm>
-            <hr>
+            <hr />
             <CForm>
               <h2>Inline</h2>
               <CRow form>
@@ -205,7 +205,7 @@
                 </CCol>
               </CRow>
             </CForm>
-            <hr>
+            <hr />
             <CForm>
               <h2>Inline</h2>
               <CRow form>
@@ -313,7 +313,7 @@ export default {
       options: [
         {
           value: 0,
-          text: 'enhancement'
+          text: 'enhancement',
         },
         {
           value: 1,
@@ -327,24 +327,24 @@ export default {
         },
         {
           value: 3,
-          text: 'invalid'
+          text: 'invalid',
         },
         {
           label: 'group',
           options: [
             {
               value: 4,
-              text: 'enhancement2'
+              text: 'enhancement2',
             },
             {
               value: 5,
-              text: 'bug2'
-            }
-          ]
-        }
+              text: 'bug2',
+            },
+          ],
+        },
       ],
-    }
+    };
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>

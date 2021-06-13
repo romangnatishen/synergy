@@ -1,11 +1,11 @@
 // If you want to override variables do it here
-@import "variables";
+@import 'variables';
 
 // Import styles with default layout.
-@import "~@coreui/coreui-pro/scss/coreui";
+@import '~@coreui/coreui-pro/scss/coreui';
 
 // If you want to add something do it here
-@import "custom";
+@import 'custom';
 
 .card-header:not(.content-center) > .c-icon:first-child {
   margin-right: 0.1rem;
@@ -15,4 +15,3 @@
   height: 1.2rem;
   font-size: 1.2rem;
 }
-

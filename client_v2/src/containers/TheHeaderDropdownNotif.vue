@@ -1,5 +1,5 @@
 <template>
-  <CDropdown 
+  <CDropdown
     placement="bottom-end"
     :caret="false"
     in-nav
@@ -8,31 +8,28 @@
   >
     <template #toggler>
       <CHeaderNavLink>
-        <CIcon name="cil-bell"/>
-        <CBadge shape="pill" color="danger">{{itemsCount}}</CBadge>
+        <CIcon name="cil-bell" />
+        <CBadge shape="pill" color="danger">{{ itemsCount }}</CBadge>
       </CHeaderNavLink>
     </template>
-    <CDropdownHeader 
-      tag="div" 
-      class="text-center bg-light"
-    >
-      <strong>You have {{itemsCount}} notifications</strong>
+    <CDropdownHeader tag="div" class="text-center bg-light">
+      <strong>You have {{ itemsCount }} notifications</strong>
     </CDropdownHeader>
     <CDropdownItem>
-      <CIcon name="cil-user-follow" class="text-success"/> New user registered
+      <CIcon name="cil-user-follow" class="text-success" /> New user registered
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-user-unfollow" class="text-danger"/> User deleted
+      <CIcon name="cil-user-unfollow" class="text-danger" /> User deleted
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-chart-pie" class="text-info"/> Sales report is ready
+      <CIcon name="cil-chart-pie" class="text-info" /> Sales report is ready
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-basket" class="text-primary"/> New client
+      <CIcon name="cil-basket" class="text-primary" /> New client
     </CDropdownItem>
     <CDropdownItem>
-      <CIcon name="cil-speedometer" class="text-warning"/> Server overloaded
-      </CDropdownItem>
+      <CIcon name="cil-speedometer" class="text-warning" /> Server overloaded
+    </CDropdownItem>
     <CDropdownHeader tag="div" class="text-center bg-light">
       <strong>Server</strong>
     </CDropdownHeader>
@@ -40,21 +37,21 @@
       <div class="text-uppercase mb-1">
         <small><b>CPU Usage</b></small>
       </div>
-      <CProgress class="progress-xs" color="info" :value="25"/>
+      <CProgress class="progress-xs" color="info" :value="25" />
       <small class="text-muted">348 Processes. 1/4 Cores.</small>
     </CDropdownItem>
     <CDropdownItem class="d-block">
       <div class="text-uppercase mb-1">
         <small><b>Memory Usage</b></small>
       </div>
-      <CProgress class="progress-xs" color="warning" :value="70"/>
+      <CProgress class="progress-xs" color="warning" :value="70" />
       <small class="text-muted">11444GB/16384MB</small>
     </CDropdownItem>
     <CDropdownItem class="d-block">
       <div class="text-uppercase mb-1">
         <small><b>SSD 1 Usage</b></small>
       </div>
-      <CProgress class="progress-xs" color="danger" :value="90"/>
+      <CProgress class="progress-xs" color="danger" :value="90" />
       <small class="text-muted">243GB/256GB</small>
     </CDropdownItem>
   </CDropdown>
@@ -62,14 +59,14 @@
 <script>
 export default {
   name: 'TheHeaderDropdownNotif',
-  data () {
-    return { itemsCount: 5 }
-  }
-}
+  data() {
+    return { itemsCount: 5 };
+  },
+};
 </script>
 
 <style scoped>
-  .c-icon {
-    margin-right: 0.3rem;
-  }
+.c-icon {
+  margin-right: 0.3rem;
+}
 </style>

@@ -1,0 +1,36 @@
+{
+  "useTabs": false,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "semi": true,
+
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "options": {
+        "parser": "babel-flow",
+        "arrowParens": "always"
+      }
+    },
+    {
+      "files": ["*.vue"],
+      "options": {
+        "parser": "vue"
+      }
+    },
+    {
+      "files": ["*.json"],
+      "options": {
+        "parser": "json"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
+}

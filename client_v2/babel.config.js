@@ -5,8 +5,8 @@ module.exports = {
       {
         useBuiltIns: 'usage',
         // useBuiltIns: 'entry',
-        corejs: 3
-      }
-    ]
-  ]
-}
+        corejs: 3,
+      },
+    ],
+  ],
+};

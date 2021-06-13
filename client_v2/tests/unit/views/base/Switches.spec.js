@@ -1,27 +1,27 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import { mount, shallowMount } from '@vue/test-utils';
-import CoreuiVue from '@coreui/vue-pro'
-import Switches from '@/views/base/Switches'
+import CoreuiVue from '@coreui/vue-pro';
+import Switches from '@/views/base/Switches';
 
-Vue.use(CoreuiVue)
+Vue.use(CoreuiVue);
 
 describe('Switches.vue', () => {
   it('has a name', () => {
-    expect(Switches.name).toBe('Switches')
-  })
+    expect(Switches.name).toBe('Switches');
+  });
   it('has a created hook', () => {
-    expect(typeof Switches.data).toMatch('function')
-  })
+    expect(typeof Switches.data).toMatch('function');
+  });
   it('is Vue instance', () => {
-    const wrapper = mount(Switches)
-    expect(wrapper.vm).toBeTruthy()
-  })
+    const wrapper = mount(Switches);
+    expect(wrapper.vm).toBeTruthy();
+  });
   it('is Switches', () => {
-    const wrapper = mount(Switches)
-    expect(wrapper.findComponent(Switches)).toBeTruthy()
-  })
+    const wrapper = mount(Switches);
+    expect(wrapper.findComponent(Switches)).toBeTruthy();
+  });
   test('renders correctly', () => {
-    const wrapper = shallowMount(Switches)
-    expect(wrapper.element).toMatchSnapshot()
-  })
-})
+    const wrapper = shallowMount(Switches);
+    expect(wrapper.element).toMatchSnapshot();
+  });
+});

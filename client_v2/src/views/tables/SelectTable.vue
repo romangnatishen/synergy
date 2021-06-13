@@ -13,7 +13,7 @@
       hover
       @row-clicked="rowClicked"
     >
-      <template #select="{item}">
+      <template #select="{ item }">
         <td>
           <CInputCheckbox
             :checked="item._selected"
@@ -27,53 +27,52 @@
 </template>
 
 <script>
-import usersData from '../users/UsersData'
+import usersData from '../users/UsersData';
 
 const fields = [
-  { 
-    key: 'select', 
-    label: '', 
-    _style: 'min-width:1%', 
+  {
+    key: 'select',
+    label: '',
+    _style: 'min-width:1%',
     sorter: false,
-    filter: false
+    filter: false,
   },
-  { key: 'username', _style:'min-width:40%' },
+  { key: 'username', _style: 'min-width:40%' },
   'registered',
-  { key: 'role', _style:'min-width:20%;' },
-  { key: 'status', _style:'min-width:20%;' },
-]
+  { key: 'role', _style: 'min-width:20%;' },
+  { key: 'status', _style: 'min-width:20%;' },
+];
 
 export default {
   name: 'SelectTable',
-  data () {
+  data() {
     return {
-      usersData: usersData.map((item, id) => { return {...item, id}}),
-      fields
-    }
+      usersData: usersData.map((item, id) => {
+        return { ...item, id };
+      }),
+      fields,
+    };
   },
   computed: {
-    users () {
-      return this.usersData.map(user => {
+    users() {
+      return this.usersData.map((user) => {
         return {
           ...user,
-          _classes: [
-            user._classes, 
-            user._selected ? 'table-selected' : ''
-          ]
-        }
-      })
-    }
+          _classes: [user._classes, user._selected ? 'table-selected' : ''],
+        };
+      });
+    },
   },
   methods: {
-    rowClicked (item, index, column, e) {
+    rowClicked(item, index, column, e) {
       if (!['INPUT', 'LABEL'].includes(e.target.tagName)) {
-        this.check(item)
+        this.check(item);
       }
     },
-    check (item) {
-      const val = Boolean(this.usersData[item.id]._selected)
-      this.$set(this.usersData[item.id], '_selected', !val)
-    }
-  }
-}
+    check(item) {
+      const val = Boolean(this.usersData[item.id]._selected);
+      this.$set(this.usersData[item.id], '_selected', !val);
+    },
+  },
+};
 </script>
