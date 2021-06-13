@@ -23,20 +23,20 @@
     size="lg"
     color="dark"
   >
-  <CCardBody>
-    <CDataTable
-      :items="kanban_issue_comments"
-      :fields="kanban_issue_comments_fields"
-      items-per-page-select
-      :items-per-page="5"
-      hover
-      sorter
-      pagination
-      table-filter
-      cleaner
-    >
-    </CDataTable>
-  </CCardBody>
+    <CCardBody>
+      <CDataTable
+        :items="kanban_issue_comments"
+        :fields="kanban_issue_comments_fields"
+        items-per-page-select
+        :items-per-page="5"
+        hover
+        sorter
+        pagination
+        table-filter
+        cleaner
+      >
+      </CDataTable>
+    </CCardBody>
     <template #header>
       <h6 class="modal-title">Komentarze z Kanban</h6>
       <CButtonClose @click="closeKanbanTaskDetails" class="text-white"/>
