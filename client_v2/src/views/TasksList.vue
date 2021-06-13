@@ -15,6 +15,34 @@
       </div>
   </CCardBody>
 
+  <CModal
+    :show.sync="KanbanDetailsVisible"
+    :no-close-on-backdrop="true"
+    :centered="true"
+    title="Komentarze z Kanban"
+    size="lg"
+    color="dark"
+  >
+  <CCardBody>
+    <CDataTable
+      :items="kanban_issue_comments"
+      :fields="kanban_issue_comments_fields"
+      items-per-page-select
+      :items-per-page="5"
+      hover
+      sorter
+      pagination
+      table-filter
+      cleaner
+    >
+    </CDataTable>
+  </CCardBody>
+    <template #header>
+      <h6 class="modal-title">Komentarze z Kanban</h6>
+      <CButtonClose @click="closeKanbanTaskDetails" class="text-white"/>
+    </template>
+  </CModal>
+
   <CCardBody v-if="showCarusel===false">   
     <CDataTable
       :items="dataArray"
@@ -89,6 +117,14 @@
               class='button'
               @click="addToKanban(item)">
               Dodaj do Kanban
+            </CButton>
+
+            <CButton 
+              size="sm" 
+              color="primary"
+              class='button'
+              @click="showKanbanTaskDetails(item)">
+              Historia Kanban
             </CButton>
             
             <CButton
@@ -174,6 +210,13 @@ export default {
         selectedStatus:null,
         selectedExecutor:null,
         collapseDuration: 0,
+        KanbanDetailsVisible : false,
+        kanban_issue_comments : [],
+        kanban_issue_comments_fields : [
+        { key:'user_name', label:'Użytkownik'},
+        { key:'description', label:'Opis'},
+        { key:'createdAt', label:'Data zmiany'},
+        ]
     }
   },
 
@@ -192,7 +235,6 @@ async created() {
 methods: {
 
   async initialize() {
-      
     if (this.$route.params) {
         this.projectId = this.$route.params.projectId;
     } else {
@@ -202,7 +244,7 @@ methods: {
         // console.log("got project id from store");
       }
     }
-    
+
   const statusesDataObject = await this.$store.dispatch("issues/findIssueStatuses", {});
     if (statusesDataObject) {
       let statusesData = [];
@@ -236,7 +278,7 @@ methods: {
     } else {
       this.issue_executors = []
     }
-
+    
     const dataObject = await this.$store.dispatch("issues/findAll",{
       project_id:this.projectId,
       include:"journals",
@@ -285,15 +327,15 @@ methods: {
             const kanbanArray = kanbanTasksArray.filter(arrItem => 
               arrItem.project_id === el.project.id&&arrItem.issue_id === el.id
               );
-            kanbanArray.forEach(el => {
-              resKanbanArray.push(
-                {
-                  value: el.executor_id,
-                  label: el.executor_name
-                  }                
-                );
-            })
-          }
+              kanbanArray.forEach(el => {
+                resKanbanArray.push(
+                  {
+                    value: el.executor_id,
+                    label: el.executor_name
+                    }                
+                  );
+              })
+            }
           if (resKanbanArray.length===0) {
               resKanbanArray.push(                
                   {
@@ -302,7 +344,8 @@ methods: {
                   }                
               );
           }
-          projectsData.push({
+         
+         projectsData.push({
             id:el.id,     
             kanbanArray:resKanbanArray,
             assigned_to:assignedName,
@@ -323,13 +366,45 @@ methods: {
             comment:"",
             _toggled:false
           })
+        this.dataArray = projectsData;
         })
-      });
-        this.dataArray = projectsData;   
+      })  
     } else {
         this.dataArray = []
-    }
+    }    
   },
+
+  async showKanbanTaskDetails(item) {
+    this.KanbanDetailsVisible = true;
+   
+    const issueData = {
+      taskId: Number(item.id).toString(),
+      redmineQuery: {}
+    };
+    const currentComments = await this.$store.dispatch("issues/findKanbanCommentsByIssueId", issueData);
+    if (currentComments) {
+      let commentsData = [];
+      currentComments.data.forEach(el => {        
+        commentsData.push(
+          {                       
+            ...el
+          },
+        )
+      });
+      this.kanban_issue_comments = commentsData;
+    } else {
+      this.kanban_issue_comments = []
+    }
+
+  },
+
+  closeKanbanTaskDetails() {
+
+    this.KanbanDetailsVisible = false;
+    this.kanban_issue_comments = []
+
+  },
+
   goToKanban(value) {
     console.log(value);
   },
