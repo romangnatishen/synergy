@@ -7,14 +7,13 @@
             <div class="clearfix">
               <h1 class="float-left display-3 mr-4">404</h1>
               <h4 class="pt-3">Oops! You're lost.</h4>
-              <p class="text-muted">The page you are looking for was not found.</p>
+              <p class="text-muted">
+                The page you are looking for was not found.
+              </p>
             </div>
-            <CInput
-              class="mb-3"
-              placeholder="What are you looking for?"
-            >
+            <CInput class="mb-3" placeholder="What are you looking for?">
               <template #prepend-content>
-                <CIcon name="cil-magnifying-glass"/>
+                <CIcon name="cil-magnifying-glass" />
               </template>
               <template #append>
                 <CButton color="info">Search</CButton>
@@ -30,10 +29,10 @@
 <script>
 export default {
   name: 'Page404',
-  computed:{
+  computed: {
     darkMode() {
       return false;
-    }
-  }
-}
+    },
+  },
+};
 </script>

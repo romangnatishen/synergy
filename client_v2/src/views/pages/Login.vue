@@ -5,15 +5,19 @@
         <CCol md="5">
           <CCard class="p-4">
             <CCardBody>
-              <CForm>                  
+              <CForm>
                 <h1>Login</h1>
-                <p class="text-muted">Portal do organizacji współpracy na projektach </p>
+                <p class="text-muted">
+                  Portal do organizacji współpracy na projektach
+                </p>
                 <CInput
                   v-model="login"
                   placeholder="Nazwa użytkownika"
                   autocomplete="username email"
                 >
-                  <template #prepend-content><CIcon name="cil-user"/></template>
+                  <template #prepend-content
+                    ><CIcon name="cil-user"
+                  /></template>
                 </CInput>
                 <CInput
                   v-model="password"
@@ -21,7 +25,9 @@
                   type="password"
                   autocomplete="curent-password"
                 >
-                  <template #prepend-content><CIcon name="cil-lock-locked"/></template>
+                  <template #prepend-content
+                    ><CIcon name="cil-lock-locked"
+                  /></template>
                 </CInput>
                 <CAlert
                   color="danger"
@@ -29,7 +35,8 @@
                   closeButton
                   fade
                 >
-                  Nie udało się zalogować. Sprawdż poprawność wprowadzonych danych.
+                  Nie udało się zalogować. Sprawdż poprawność wprowadzonych
+                  danych.
                   <!-- <CProgress
                     :max="10"
                     :value="invalidUserData"
@@ -37,9 +44,11 @@
                     color="danger"
                     animate
                   /> -->
-                </CAlert>                  
+                </CAlert>
                 <CCol>
-                  <CButton color="primary" @click="userLogin()">Zaloguj się</CButton>
+                  <CButton color="primary" @click="userLogin()"
+                    >Zaloguj się</CButton
+                  >
                 </CCol>
               </CForm>
             </CCardBody>
@@ -51,52 +60,51 @@
 </template>
 
 <script>
-import {DeviceUUID} from 'device-uuid';
+import { DeviceUUID } from 'device-uuid';
 
 export default {
-  name: "Login",
+  name: 'Login',
   data: () => ({
     invalidUserData: false,
-    login: "",
-    password: "",
-    message: "",
-    uuid:""
-
+    login: '',
+    password: '',
+    message: '',
+    uuid: '',
   }),
-   mounted () {
-      this.uuid = new DeviceUUID().get();
-      // const du = new DeviceUUID().parse();
-      // console.log(du);      
-    },
-      
+  mounted() {
+    this.uuid = new DeviceUUID().get();
+    // const du = new DeviceUUID().parse();
+    // console.log(du);
+  },
+
   methods: {
     async userLogin() {
-      
       if (!this.login) {
-        this.message = "Login is required";
+        this.message = 'Login is required';
         return;
       }
       if (!this.password) {
-        this.message = "Password is required";
+        this.message = 'Password is required';
         return;
-      }            
-      await this.$store.dispatch("profile/login", {
+      }
+      await this.$store
+        .dispatch('profile/login', {
           email: this.login,
           password: this.password,
-          uuid: this.uuid
+          uuid: this.uuid,
         })
-        .then( async (res) => {
-            localStorage.setItem("access_token", res.data.access_token);
-            await this.$store.dispatch("profile/fetchProfile").then(
-              fetchProfileRes=>{
-                  this.$router.push({ name: "Dashboard" });
-              }
-            );          
+        .then(async (res) => {
+          localStorage.setItem('access_token', res.data.access_token);
+          await this.$store
+            .dispatch('profile/fetchProfile')
+            .then((fetchProfileRes) => {
+              this.$router.push({ name: 'Dashboard' });
+            });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
+    },
   },
 };
 </script>

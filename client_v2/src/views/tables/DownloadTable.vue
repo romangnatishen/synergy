@@ -3,7 +3,7 @@
     <CButton
       color="primary"
       class="mb-2"
-      :href="csvCode" 
+      :href="csvCode"
       download="coreui-table-data.csv"
       target="_blank"
     >
@@ -17,33 +17,38 @@
       sorter
       pagination
       @filtered-items-change="setCurrentItems"
-    />    
+    />
   </CCardBody>
 </template>
 
 <script>
-import usersData from '../users/UsersData'
+import usersData from '../users/UsersData';
 
 export default {
   name: 'DownloadTable',
-  data () {
+  data() {
     return {
       usersData,
-      currentItems: usersData.slice()
-    }
+      currentItems: usersData.slice(),
+    };
   },
   computed: {
-    csvContent () {
-      return this.currentItems.map(item => Object.values(item).join(',')).join('\n')
+    csvContent() {
+      return this.currentItems
+        .map((item) => Object.values(item).join(','))
+        .join('\n');
     },
-    csvCode () {
-      return 'data:text/csv;charset=utf-8,SEP=,%0A' + encodeURIComponent(this.csvContent)
-    }
+    csvCode() {
+      return (
+        'data:text/csv;charset=utf-8,SEP=,%0A' +
+        encodeURIComponent(this.csvContent)
+      );
+    },
   },
   methods: {
-    setCurrentItems (val) {
-      this.currentItems = val
-    }
-  }
-}
+    setCurrentItems(val) {
+      this.currentItems = val;
+    },
+  },
+};
 </script>

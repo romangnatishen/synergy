@@ -3,21 +3,21 @@
     <CCol sm="6">
       <CCard>
         <CCardHeader>
-          <strong>Masked Input</strong> 
+          <strong>Masked Input</strong>
           <small class="ml-1">vue-text-mask</small>
-          <a 
-            href="https://coreui.io/pro/vue/" 
-            rel="noreferrer noopener" 
-            target="_blank" 
+          <a
+            href="https://coreui.io/pro/vue/"
+            rel="noreferrer noopener"
+            target="_blank"
             class="badge badge-danger ml-1"
           >
             CoreUI Pro
           </a>
           <div class="card-header-actions">
-            <a 
-              href="https://github.com/text-mask/text-mask/tree/master/vue#readme" 
-              rel="noreferrer noopener" 
-              target="_blank" 
+            <a
+              href="https://github.com/text-mask/text-mask/tree/master/vue#readme"
+              rel="noreferrer noopener"
+              target="_blank"
               class="card-header-action"
             >
               <small class="text-muted">docs</small>
@@ -30,18 +30,27 @@
             description="ex. 99/99/9999"
           >
             <template #prepend-content>
-              <CIcon name="cil-calendar"/>
+              <CIcon name="cil-calendar" />
             </template>
-            <template #label>
-              Date input
-            </template>
+            <template #label> Date input </template>
             <template #input>
               <masked-input
                 type="text"
                 name="date"
                 class="form-control"
                 v-model="date"
-                :mask="[/0|1|2|3/, /\d/, '/', /0|1|2|3/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]"
+                :mask="[
+                  /0|1|2|3/,
+                  /\d/,
+                  '/',
+                  /0|1|2|3/,
+                  /\d/,
+                  '/',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="_"
                 :showMask="true"
@@ -55,18 +64,31 @@
             description="ex. (999) 999-9999"
           >
             <template #prepend-content>
-              <CIcon name="cil-phone"/>
+              <CIcon name="cil-phone" />
             </template>
-            <template #label>
-              Phone Number
-            </template>
+            <template #label> Phone Number </template>
             <template #input>
               <masked-input
                 type="tel"
                 name="phone"
                 class="form-control"
                 v-model="phone"
-                :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+                :mask="[
+                  '(',
+                  /[1-9]/,
+                  /\d/,
+                  /\d/,
+                  ')',
+                  ' ',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  '-',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="#"
               />
@@ -78,18 +100,27 @@
             description="ex. 99-9999999"
           >
             <template #prepend-content>
-              <CIcon name="cil-dollar"/>
+              <CIcon name="cil-dollar" />
             </template>
-            <template #label>
-              Taxpayer Identification Number
-            </template>
+            <template #label> Taxpayer Identification Number </template>
             <template #input>
               <masked-input
                 type="text"
                 name="taxid"
                 class="form-control"
                 v-model="taxid"
-                :mask="[/\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]"
+                :mask="[
+                  /\d/,
+                  /\d/,
+                  '-',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="#"
               />
@@ -101,18 +132,28 @@
             description="ex. 999-99-9999"
           >
             <template #prepend-content>
-              <CIcon name="cil-user"/>
+              <CIcon name="cil-user" />
             </template>
-            <template #label>
-              Social Security Number
-            </template>
+            <template #label> Social Security Number </template>
             <template #input>
               <masked-input
                 type="text"
                 name="ssn"
                 class="form-control"
                 v-model="ssn"
-                :mask="[/\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+                :mask="[
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  '-',
+                  /\d/,
+                  /\d/,
+                  '-',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="#"
               />
@@ -124,18 +165,32 @@
             description="ex. ~9.99 ~9.99 999"
           >
             <template #prepend-content>
-              <CIcon name="cil-drop"/>
-            </template>          
-            <template #label>
-              Eye Script
+              <CIcon name="cil-drop" />
             </template>
+            <template #label> Eye Script </template>
             <template #input>
               <masked-input
                 type="text"
                 name="eye"
                 class="form-control"
                 v-model="eye"
-                :mask="['~', /\d/, '.', /\d/, /\d/, ' ', '~', /\d/, '.', /\d/, /\d/, ' ', /\d/, /\d/, /\d/]"
+                :mask="[
+                  '~',
+                  /\d/,
+                  '.',
+                  /\d/,
+                  /\d/,
+                  ' ',
+                  '~',
+                  /\d/,
+                  '.',
+                  /\d/,
+                  /\d/,
+                  ' ',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="#"
               />
@@ -147,18 +202,36 @@
             description="ex. 9999 9999 9999 9999"
           >
             <template #prepend-content>
-              <CIcon name="cil-credit-card"/>
+              <CIcon name="cil-credit-card" />
             </template>
-            <template #label>
-              Credit Card Number
-            </template>
+            <template #label> Credit Card Number </template>
             <template #input>
               <masked-input
                 type="text"
                 name="ccn"
                 class="form-control"
                 v-model="ccn"
-                :mask="[/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/]"
+                :mask="[
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  ' ',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  ' ',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  ' ',
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                  /\d/,
+                ]"
                 :guide="true"
                 placeholderChar="#"
               />
@@ -170,21 +243,21 @@
     <CCol sm="6">
       <CCard>
         <CCardHeader>
-          <strong>Multiselect</strong> 
+          <strong>Multiselect</strong>
           <small class="ml-1">vue-multiselect</small>
-          <a 
-            href="https://coreui.io/pro/vue/" 
-            rel="noreferrer noopener" 
-            target="_blank" 
+          <a
+            href="https://coreui.io/pro/vue/"
+            rel="noreferrer noopener"
+            target="_blank"
             class="badge badge-danger ml-1"
           >
             CoreUI Pro
           </a>
           <div class="card-header-actions">
-            <a 
-              href="https://vue-multiselect.js.org/#sub-getting-started" 
-              rel="noreferrer noopener" 
-              target="_blank" 
+            <a
+              href="https://vue-multiselect.js.org/#sub-getting-started"
+              rel="noreferrer noopener"
+              target="_blank"
               class="card-header-action"
             >
               <small class="text-muted">docs</small>
@@ -192,11 +265,11 @@
           </div>
         </CCardHeader>
         <CCardBody>
-          <multiselect 
-            v-model="multi" 
-            :options="$options.multiselectOptions" 
-            :multiple="true" 
-            label="label" 
+          <multiselect
+            v-model="multi"
+            :options="$options.multiselectOptions"
+            :multiple="true"
+            label="label"
             track-by="label"
           />
         </CCardBody>
@@ -204,19 +277,19 @@
       <CCard>
         <CCardHeader>
           <strong>Select</strong> <small class="ml-1">vue-select</small>
-          <a 
-            href="https://coreui.io/pro/vue/" 
-            rel="noreferrer noopener" 
-            target="_blank" 
+          <a
+            href="https://coreui.io/pro/vue/"
+            rel="noreferrer noopener"
+            target="_blank"
             class="badge badge-danger ml-1"
           >
             CoreUI Pro
           </a>
           <div class="card-header-actions">
-            <a 
-              href="https://vue-select.org/" 
-              rel="noreferrer noopener" 
-              target="_blank" 
+            <a
+              href="https://vue-select.org/"
+              rel="noreferrer noopener"
+              target="_blank"
               class="card-header-action"
             >
               <small class="text-muted">docs</small>
@@ -224,10 +297,10 @@
           </div>
         </CCardHeader>
         <CCardBody>
-          <v-select 
-            v-model="selected" 
+          <v-select
+            v-model="selected"
             multiple
-            :options="$options.multiselectOptions" 
+            :options="$options.multiselectOptions"
             placeholder="Select option"
           />
         </CCardBody>
@@ -235,19 +308,19 @@
       <CCard>
         <CCardHeader>
           <strong>Date Picker</strong>
-          <a 
-            href="https://coreui.io/pro/vue/" 
+          <a
+            href="https://coreui.io/pro/vue/"
             rel="noreferrer noopener"
-            target="_blank" 
+            target="_blank"
             class="badge badge-danger ml-1"
           >
             CoreUI Pro
           </a>
           <div class="card-header-actions">
-            <a 
-              href="https://vcalendar.io/" 
-              rel="noreferrer noopener" 
-              target="_blank" 
+            <a
+              href="https://vcalendar.io/"
+              rel="noreferrer noopener"
+              target="_blank"
               class="card-header-action"
             >
               <small class="text-muted">docs</small>
@@ -255,13 +328,9 @@
           </div>
         </CCardHeader>
         <CCardBody>
-          <v-date-picker
-            mode="range"
-            v-model="selectedDate"
-            is-inline
-          />
+          <v-date-picker mode="range" v-model="selectedDate" is-inline />
           <p>
-            start: {{ selectedDate.start.toLocaleDateString() }} <br/>
+            start: {{ selectedDate.start.toLocaleDateString() }} <br />
             end: {{ selectedDate.end.toLocaleDateString() }}
           </p>
         </CCardBody>
@@ -271,14 +340,14 @@
 </template>
 
 <script>
-import MaskedInput from 'vue-text-mask'
-import Multiselect from 'vue-multiselect'
-import vSelect from 'vue-select'
-import { DatePicker } from 'v-calendar'
-import 'vue-select/dist/vue-select.css'
-import 'vue-multiselect/dist/vue-multiselect.min.css'
+import MaskedInput from 'vue-text-mask';
+import Multiselect from 'vue-multiselect';
+import vSelect from 'vue-select';
+import { DatePicker } from 'v-calendar';
+import 'vue-select/dist/vue-select.css';
+import 'vue-multiselect/dist/vue-multiselect.min.css';
 
-const today = new Date()
+const today = new Date();
 
 export default {
   name: 'advanced-forms',
@@ -286,9 +355,9 @@ export default {
     MaskedInput,
     Multiselect,
     vSelect,
-    'v-date-picker': DatePicker
+    'v-date-picker': DatePicker,
   },
-  data () {
+  data() {
     return {
       date: '',
       phone: '',
@@ -300,9 +369,9 @@ export default {
       selected: null,
       selectedDate: {
         start: new Date(today.getFullYear(), today.getMonth(), 7),
-        end: new Date(today.getFullYear(), today.getMonth(), 11)
-      }
-    }
+        end: new Date(today.getFullYear(), today.getMonth(), 11),
+      },
+    };
   },
   multiselectOptions: [
     { value: 'AL', label: 'Alabama' },
@@ -363,7 +432,7 @@ export default {
     { value: 'WA', label: 'Washington' },
     { value: 'WV', label: 'West Virginia' },
     { value: 'WI', label: 'Wisconsin' },
-    { value: 'WY', label: 'Wyoming' }
-  ]
-}
+    { value: 'WY', label: 'Wyoming' },
+  ],
+};
 </script>

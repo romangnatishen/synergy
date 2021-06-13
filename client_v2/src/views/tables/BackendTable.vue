@@ -1,6 +1,6 @@
 <template>
   <CCardBody>
-    This example simulates data passed lazily from backend.<br><br> 
+    This example simulates data passed lazily from backend.<br /><br />
     <!-- 
       This example simulates data passed lazily from backend.
       This example might be connected to backend, for items lazy loading.
@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import usersData from '../users/UsersData'
+import usersData from '../users/UsersData';
 
 export default {
   name: 'BackendTable',
-  data () {
+  data() {
     return {
       usersData,
       sorterValue: { column: null, asc: true },
@@ -55,34 +55,34 @@ export default {
       activePage: 1,
       loadedItems: usersData.slice(0, 5),
       loading: false,
-      pages: 5
-    }
+      pages: 5,
+    };
   },
   watch: {
-    reloadParams () {
-      this.onTableChange()
-    }
+    reloadParams() {
+      this.onTableChange();
+    },
   },
   computed: {
-    reloadParams () {
-      return [  
+    reloadParams() {
+      return [
         this.sorterValue,
         this.columnFilterValue,
         this.tableFilterValue,
-        this.activePage
-      ]
-    }
+        this.activePage,
+      ];
+    },
   },
   methods: {
-    onTableChange () {
-      this.loading = true
+    onTableChange() {
+      this.loading = true;
       setTimeout(() => {
-        this.loading = false
-        const agent = this.$refs.externalAgent
-        this.loadedItems = agent.currentItems
-        this.pages = Math.ceil(agent.sortedItems.length / 5)
-      }, 1000)
-    }
-  }
-}
+        this.loading = false;
+        const agent = this.$refs.externalAgent;
+        this.loadedItems = agent.currentItems;
+        this.pages = Math.ceil(agent.sortedItems.length / 5);
+      }, 1000);
+    },
+  },
+};
 </script>

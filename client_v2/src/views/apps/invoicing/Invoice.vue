@@ -4,14 +4,14 @@
       Invoice <strong>#90-98792</strong>
       <div class="float-right">
         <a href="#" class="btn btn-sm btn-info">
-          <CIcon name="cil-save"/> Save
+          <CIcon name="cil-save" /> Save
         </a>
-        <a 
-          href="#" 
-          class="btn btn-sm btn-info ml-1" 
+        <a
+          href="#"
+          class="btn btn-sm btn-info ml-1"
           onclick="javascript:window.print();"
         >
-          <CIcon name="cil-print" class="mr-1"/> Print
+          <CIcon name="cil-print" class="mr-1" /> Print
         </a>
       </div>
     </CCardHeader>
@@ -66,7 +66,9 @@
             <tr>
               <td class="center">2</td>
               <td class="left">Custom Services</td>
-              <td class="left">Instalation and Customization (cost per hour)</td>
+              <td class="left">
+                Instalation and Customization (cost per hour)
+              </td>
               <td class="center">20</td>
               <td class="right">$150,00</td>
               <td class="right">$3.000,00</td>
@@ -92,7 +94,12 @@
       </div>
       <CRow>
         <CCol lg="4" sm="5">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur.
         </CCol>
         <CCol lg="4" sm="5" class="ml-auto">
           <table class="table table-clear">
@@ -116,7 +123,7 @@
             </tbody>
           </table>
           <a href="#" class="btn btn-success">
-            <CIcon name="cil-dollar"/> Proceed to Payment
+            <CIcon name="cil-dollar" /> Proceed to Payment
           </a>
         </CCol>
       </CRow>
@@ -124,8 +131,7 @@
   </CCard>
 </template>
 <script>
-
 export default {
-  name: 'Invoice'
-}
+  name: 'Invoice',
+};
 </script>

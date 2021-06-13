@@ -7,7 +7,7 @@
 ![Daily](https://github.com/coreui/coreui-pro-vue-admin-template/workflows/Daily%20project%20check/badge.svg?branch=master)
 
 [npm-coreui-vue]: https://www.npmjs.com/package/@coreui/vue-pro
-[npm-coreui-vue-badge-latest]: https://img.shields.io/npm/v/@coreui/vue-pro/latest?style=flat-square&color=brightgreen  
+[npm-coreui-vue-badge-latest]: https://img.shields.io/npm/v/@coreui/vue-pro/latest?style=flat-square&color=brightgreen
 [coreui]: https://coreui.io/vue
 
 ![Template](https://coreui.io/images/github/vue-free-template-3.gif)
@@ -23,7 +23,7 @@ Why we decided to create CoreUI? Please read this article: [Jack of all trades, 
 - Dedicated vue tooling libraries ([coreui-vue-chartjs](https://coreui.io/vue/docs/components/charts), [coreui-icons-vue](https://github.com/coreui/coreui-icons-vue)),
 - Over 500 [free svg icons](https://coreui.io/icons) consistent with our styling,
 - Transparent code and file structure
-- Possibility of extension to [pro version](https://coreui.io/vue) which offers even more! 
+- Possibility of extension to [pro version](https://coreui.io/vue) which offers even more!
 
 CoreUI is meant to be the UX game changer. Pure & transparent code is devoid of redundant components, so the app is light enough to offer ultimate user experience. This means mobile devices also, where the navigation is just as easy and intuitive as on a desktop or laptop. The CoreUI Layout API lets you customize your project for almost any device – be it Mobile, Web or WebApp – CoreUI covers them all!
 
@@ -50,7 +50,7 @@ A fully functional demo is available at [CoreUI](http://coreui.io/vue/)
 
 #### Clone repo
 
-``` bash
+```bash
 # clone the repo
 $ git clone https://github.com/coreui/coreui-pro-vue-admin-template.git CoreUI-Vue
 
@@ -63,7 +63,7 @@ $ npm install
 
 #### Usage
 
-``` bash
+```bash
 # serve with hot reload at localhost:8080
 npm run serve
 
@@ -123,11 +123,11 @@ CoreUI is built on top of Bootstrap 4 and supports popular frameworks.
 
 #### Pro version products
 
-- 💪  [CoreUI Pro Laravel Vue Admin Template](https://coreui.io/pro/laravel)
-- 💪  [CoreUI Pro Laravel Admin Template](https://coreui.io/pro/laravel)
-- 💪  [CoreUI Pro Bootstrap Admin Template](https://coreui.io/pro/)
-- 💪  [CoreUI Pro Angular Admin Template](https://coreui.io/pro/angular)
-- 💪  [CoreUI Pro React Admin Template](https://coreui.io/pro/react)
+- 💪 [CoreUI Pro Laravel Vue Admin Template](https://coreui.io/pro/laravel)
+- 💪 [CoreUI Pro Laravel Admin Template](https://coreui.io/pro/laravel)
+- 💪 [CoreUI Pro Bootstrap Admin Template](https://coreui.io/pro/)
+- 💪 [CoreUI Pro Angular Admin Template](https://coreui.io/pro/angular)
+- 💪 [CoreUI Pro React Admin Template](https://coreui.io/pro/react)
 
 ## Community
 

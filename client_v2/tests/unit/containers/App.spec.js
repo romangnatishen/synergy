@@ -1,31 +1,30 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import VueRouter from 'vue-router'
-import CoreuiVue from '@coreui/vue-pro'
-import App from '@/App'
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import VueRouter from 'vue-router';
+import CoreuiVue from '@coreui/vue-pro';
+import App from '@/App';
 
-const localVue = createLocalVue()
-localVue.use(VueRouter)
-const router = new VueRouter()
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+const router = new VueRouter();
 
-
-localVue.use(CoreuiVue)
+localVue.use(CoreuiVue);
 
 describe('App.vue', () => {
   it('has a name', () => {
-    expect(App.name).toBe('App')
-  })
+    expect(App.name).toBe('App');
+  });
   it('is Vue instance', () => {
     const wrapper = shallowMount(App, {
       localVue,
-      router
-    })
-    expect(wrapper.vm).toBeTruthy()
-  })
+      router,
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
   it('is App', () => {
     const wrapper = shallowMount(App, {
       localVue,
-      router
-    })
-    expect(wrapper.findComponent(App)).toBeTruthy()
-  })
-})
+      router,
+    });
+    expect(wrapper.findComponent(App)).toBeTruthy();
+  });
+});

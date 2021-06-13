@@ -1,9 +1,9 @@
 <template>
   <div class="c-app" :class="{ 'c-dark-theme': darkMode }">
-    <EmailSidebar/>
-    <TheAside/>
+    <EmailSidebar />
+    <TheAside />
     <CWrapper>
-      <TheHeader/>
+      <TheHeader />
       <div class="c-body">
         <main class="c-main">
           <CContainer fluid>
@@ -17,16 +17,16 @@
           </CContainer>
         </main>
       </div>
-      <TheFooter/>
+      <TheFooter />
     </CWrapper>
   </div>
 </template>
 
 <script>
-import EmailSidebar from './EmailSidebar'
-import TheHeader from '../../../containers/TheHeader'
-import TheFooter from '../../../containers/TheFooter'
-import TheAside from '../../../containers/TheAside'
+import EmailSidebar from './EmailSidebar';
+import TheHeader from '../../../containers/TheHeader';
+import TheFooter from '../../../containers/TheFooter';
+import TheAside from '../../../containers/TheAside';
 
 export default {
   name: 'EmailApp',
@@ -34,15 +34,15 @@ export default {
     EmailSidebar,
     TheHeader,
     TheFooter,
-    TheAside
+    TheAside,
   },
-   computed: {
-    darkMode () {
+  computed: {
+    darkMode() {
       return false;
-      // return this.$store.getters['store/state'].darkMode; 
+      // return this.$store.getters['store/state'].darkMode;
     },
-  }  
-}
+  },
+};
 </script>
 
 <style scoped>
