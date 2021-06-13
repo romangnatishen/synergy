@@ -14,7 +14,7 @@ Vue.use(CoreuiVuePro);
 Vue.prototype.$log = console.log.bind(console);
 
 new Vue({
-  el: '#app',
+    el: '#app',
   router,
   store,
   //CIcon component documentation: https://coreui.io/vue/docs/components/icon
