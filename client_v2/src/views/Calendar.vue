@@ -190,7 +190,6 @@ import {
 import 'vue-simple-calendar/static/css/default.css';
 import 'vue-simple-calendar/static/css/holidays-us.css';
 
-import { Datetime } from 'vue-datetime';
 // You need a specific loader for CSS files
 import 'vue-datetime/dist/vue-datetime.css';
 import generalFunctions from '../plugins/generalFunctions';
