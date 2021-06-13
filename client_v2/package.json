@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@app-masters/hubstaff-node-client": "^1.0.5",
+    "@babel/preset-env": "^7.14.5",
     "@coreui/coreui-pro": "^3.4.0",
     "@coreui/icons": "^2.0.0-rc.0",
     "@coreui/utils": "^1.3.1",
@@ -47,6 +48,7 @@
     "quill": "~1.3.7",
     "regenerator-runtime": "^0.13.7",
     "spinkit": "~2.0.1",
+    "throttle-debounce": "^3.0.1",
     "v-calendar": "~1.0.8",
     "vue": "^2.6.12",
     "vue-codemirror": "~4.0.6",
