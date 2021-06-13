@@ -28,16 +28,6 @@
       </CButton>
     </div>
     <CRow v-if="showCarusel===false">
-      <!-- <CCol>
-        <CNav variant="tabs">
-          <CNavItem active>
-            Potoczne
-          </CNavItem>
-          <CNavItem>
-            Projektowe
-          </CNavItem>
-        </CNav>
-      </CCol> -->
       <CCol>
         <CSelect
         label="Wykonawca"
@@ -67,18 +57,6 @@
           <div>
             <strong>{{column.title}}</strong>
           </div>
-          <!-- <div>
-            <tr>
-              <th>
-                <p>Zadań 6</p>
-              </th>
-              <th>
-                <p>Godzin 15</p>
-              </th>
-            </tr>
-
-          </div>
-          <tr>Przeterminowane 3</tr> -->
         </div>
           <draggable :delay="draggableConfig.delay"
                      :touchStartThreshold="draggableConfig.touchStartThreshold"
