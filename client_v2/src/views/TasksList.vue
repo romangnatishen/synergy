@@ -17,6 +17,34 @@
       </div>
     </CCardBody>
 
+    <CModal
+      :show.sync="KanbanDetailsVisible"
+      :no-close-on-backdrop="true"
+      :centered="true"
+      title="Komentarze z Kanban"
+      size="lg"
+      color="dark"
+    >
+      <CCardBody>
+        <CDataTable
+          :items="kanban_issue_comments"
+          :fields="kanban_issue_comments_fields"
+          items-per-page-select
+          :items-per-page="5"
+          hover
+          sorter
+          pagination
+          table-filter
+          cleaner
+        >
+        </CDataTable>
+      </CCardBody>
+      <template #header>
+        <h6 class="modal-title">Komentarze z Kanban</h6>
+        <CButtonClose @click="closeKanbanTaskDetails" class="text-white" />
+      </template>
+    </CModal>
+
     <CCardBody v-if="showCarusel === false">
       <CDataTable
         :items="dataArray"
@@ -50,7 +78,7 @@
             </CButton>
           </td>
         </template>
-        <template #kanban="{ item, index }">
+        <template #kanban="{ item }">
           <td class="py-2">
             <!-- <CButton
             color="primary"
@@ -93,6 +121,15 @@
                 @click="addToKanban(item)"
               >
                 Dodaj do Kanban
+              </CButton>
+
+              <CButton
+                size="sm"
+                color="primary"
+                class="button"
+                @click="showKanbanTaskDetails(item)"
+              >
+                Historia Kanban
               </CButton>
 
               <CButton
@@ -177,6 +214,13 @@ export default {
       selectedStatus: null,
       selectedExecutor: null,
       collapseDuration: 0,
+      KanbanDetailsVisible: false,
+      kanban_issue_comments: [],
+      kanban_issue_comments_fields: [
+        { key: 'user_name', label: 'Użytkownik' },
+        { key: 'description', label: 'Opis' },
+        { key: 'createdAt', label: 'Data zmiany' },
+      ],
     };
   },
 
@@ -313,6 +357,7 @@ export default {
                 label: 'Czeka',
               });
             }
+
             projectsData.push({
               id: el.id,
               kanbanArray: resKanbanArray,
@@ -334,13 +379,43 @@ export default {
               comment: '',
               _toggled: false,
             });
+            this.dataArray = projectsData;
           });
         });
-        this.dataArray = projectsData;
       } else {
         this.dataArray = [];
       }
     },
+
+    async showKanbanTaskDetails(item) {
+      this.KanbanDetailsVisible = true;
+
+      const issueData = {
+        taskId: Number(item.id).toString(),
+        redmineQuery: {},
+      };
+      const currentComments = await this.$store.dispatch(
+        'issues/findKanbanCommentsByIssueId',
+        issueData
+      );
+      if (currentComments) {
+        let commentsData = [];
+        currentComments.data.forEach((el) => {
+          commentsData.push({
+            ...el,
+          });
+        });
+        this.kanban_issue_comments = commentsData;
+      } else {
+        this.kanban_issue_comments = [];
+      }
+    },
+
+    closeKanbanTaskDetails() {
+      this.KanbanDetailsVisible = false;
+      this.kanban_issue_comments = [];
+    },
+
     goToKanban(value) {
       console.log(value);
     },
@@ -414,10 +489,7 @@ export default {
             taskId: Number(item.id).toString(),
             redmineQuery: {},
           };
-          const currentIssue = await this.$store.dispatch(
-            'issues/getIssue',
-            issueData
-          );
+          await this.$store.dispatch('issues/getIssue', issueData);
         });
     },
 
@@ -425,7 +497,7 @@ export default {
       window.open('https://tasks.axioma.pl/issues/' + String(item.id));
     },
 
-    toggleDetails(item, index) {
+    toggleDetails(item) {
       const found = this.dataArray.find((el) => el.id === item.id);
       this.$set(found, '_toggled', !item._toggled);
       // this.collapseDuration = 300
