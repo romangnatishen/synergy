@@ -1,9 +1,10 @@
-const apiKeyConfig = require('../../redmine/getApiKey');
+// const apiKeyConfig = require('../../redmine/getApiKey');
+const adminApiKeyConfig = require('../../redmine/getAdminApiKey');
 
 module.exports = async (req, res, next) => {
   const Redmine = require('node-redmine');
   const hostname = process.env.REDMINE_HOST;
-  const redmineApiKey = await apiKeyConfig(req.headers.authorization); 
+  const redmineApiKey = await adminApiKeyConfig(); 
   const config = {
       apiKey: redmineApiKey
   }; 
