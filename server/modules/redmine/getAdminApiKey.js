@@ -14,5 +14,8 @@ module.exports = async () => {
             admin_api_key = el.redmine_api_key;            
         });
     }
+    console.log('filter',filter);
+    console.log('admin api key',admin_api_key);
+
     return admin_api_key;
 }
