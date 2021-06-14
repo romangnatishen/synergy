@@ -1,8 +1,8 @@
 const User = require('../user/model');
 
-module.exports = async (params) => {
+module.exports = async () => {
 
-    const params = {
+    const filter = {
         where:{
             name:process.env.REDMINE_ADMIN
             }
