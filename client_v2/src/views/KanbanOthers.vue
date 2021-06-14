@@ -167,11 +167,11 @@ export default {
       kanban_data: [],
 
       taskFields: [
-        { key: 'project_name' },        
-        { key: 'issue_id' },
-        { key: 'issue_name' },
-        { key: 'estimated_hours' },
-        { key: 'due_date' },
+        { key: 'project_name', label:'Projekt' },        
+        { key: 'issue_id', label:'Nr. zadania'},
+        { key: 'issue_name', label:'Opis'},
+        { key: 'estimated_hours', label:'Il. godzin' },
+        { key: 'due_date', label:'Data oddania' },
       ],
       issue_comments: [],
       issue_comments_fields : [

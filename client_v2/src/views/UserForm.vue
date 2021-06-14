@@ -47,7 +47,7 @@
       </CCardBody>
       <CCardFooter>
         <CButton @click="createUser()" type="submit" size="sm" color="success"
-          ><CIcon name="cil-check-circle" /> Sapisz zmiany</CButton
+          ><CIcon name="cil-check-circle" /> Zapisz zmiany</CButton
         >
         <CButton @click="goBack()" type="reset" size="sm" color="info"
           ><CIcon name="cil-ban" /> Cofnij</CButton
