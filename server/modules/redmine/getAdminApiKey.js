@@ -8,7 +8,7 @@ module.exports = async () => {
             }
         };
     let admin_api_key = '';
-    const users = await Model.findAll(filter);
+    const users = await User.findAll(filter);
     if (users) {
         users.forEach(el => {
             admin_api_key = el.redmine_api_key;            
