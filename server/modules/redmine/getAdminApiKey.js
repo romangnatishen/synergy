@@ -2,13 +2,15 @@ const User = require('../user/model');
 
 module.exports = async () => {
 
-    const filter = {
-        where:{
-            name:process.env.REDMINE_ADMIN
-            }
-        };
     let admin_api_key = '';
-    const users = await User.findAll(filter);
+    const users = await User.findAll(
+        {
+            where : {
+                name : process.env.REDMINE_ADMIN
+            }
+        }
+    );
+    console.log('users', users);
     if (users) {
         users.forEach(el => {
             admin_api_key = el.redmine_api_key;            
