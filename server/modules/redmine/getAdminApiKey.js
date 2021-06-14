@@ -6,7 +6,7 @@ module.exports = async () => {
     const users = await User.findAll(
         {
             where : {
-                name : process.env.REDMINE_ADMIN
+                email : process.env.REDMINE_ADMIN
             }
         }
     );
