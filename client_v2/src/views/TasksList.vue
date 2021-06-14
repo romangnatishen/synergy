@@ -333,7 +333,9 @@ export default {
               const moduleField = el.custom_fields.find(
                 (arrItem) => arrItem.id === 12
               );
-              moduleValue = moduleField.value;
+              if (moduleField) {
+                moduleValue = moduleField.value;
+              }
             }
 
             let resKanbanArray = [];
