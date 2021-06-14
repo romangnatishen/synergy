@@ -8,6 +8,7 @@ const TheContainer = () => import('@/containers/TheContainer');
 const Dashboard = () => import('@/views/Dashboard');
 
 const Kanban = () => import('@/views/Kanban');
+const KanbanOthers = () => import('@/views/KanbanOthers');
 const TasksList = () => import('@/views/TasksList');
 const ProjectsList = () => import('@/views/ProjectsList');
 
@@ -89,6 +90,11 @@ export default new Router({
           path: '/kanban',
           name: 'Kanban',
           component: Kanban,
+        },
+        {
+          path: '/kanban_others',
+          name: 'KanbanOthers',
+          component: KanbanOthers,
         },
         {
           path: '/taskslist',

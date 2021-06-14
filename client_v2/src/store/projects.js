@@ -18,6 +18,23 @@ export default {
       commit('SET_FILTER_PROJECT', filterProject);
     },
 
+    async findCurrentRedmineUser() {
+      let redmineParams = redmineConnection(this.getters);
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/current_redmine_users`,
+        undefined,
+        redmineParams
+      );
+
+      const response = await axios(data);
+      if (response.status === 200) {
+        return response;
+      } else {
+        return [];
+      }
+    },
+
     async findRedmineUsers() {
       let redmineParams = redmineConnection(this.getters);
       const data = requestDataHandler(

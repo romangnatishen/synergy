@@ -6,6 +6,8 @@ const verifyProfile = require('../../../middleware/verifyProfile');
 
 router.get('/users',verifyProfile, controllers.findAll);
 router.get('/redmine_users',verifyProfile, controllers.findRedmineUsers);
+router.get('/current_redmine_users',verifyProfile, controllers.currentRedmineUser);
+
 router.get('/users/:id',verifyProfile, controllers.findById);
 router.post('/users',verifyProfile, controllers.create);
 router.put('/users/:id',verifyProfile, controllers.update);

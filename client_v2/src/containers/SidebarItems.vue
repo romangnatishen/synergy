@@ -19,13 +19,14 @@ export default {
                   icon: 'cil-calendar',
                 },
                 {
-                  name: 'Kanban',
+                  name: 'Mój Kanban',
                   to: '/kanban',
                   icon: 'cil-calendar',
-                  badge: {
-                    color: 'danger',
-                    text: 'Nowe',
-                  },
+                },
+                {
+                  name: 'Kanban innych',
+                  to: '/kanban_others',
+                  icon: 'cil-calendar',
                 },
               ],
             },

@@ -445,6 +445,8 @@ export default {
       const foundExecutor = this.issue_executors.find(
         (el) => el.value === item.assigned_Id
       );
+      const currentRedmineUser = await this.$store.dispatch("projects/findCurrentRedmineUser");
+
       const addData = {
         project_id: item.project.id,
         project_name: item.project.name,
@@ -453,7 +455,11 @@ export default {
         executor_name: foundExecutor.label,
         issue_id: item.id,
         issue_name: item.subject,
-      };
+        auditor_id:currentRedmineUser.data.user.id,
+        auditor_name:(""+currentRedmineUser.data.user.firstname + " " + currentRedmineUser.data.user.lastname),
+
+        };
+
       const presentInKanban = item.kanbanArray.filter(
         (el) => Number(el.value) === Number(item.assigned_Id)
       );
@@ -468,7 +474,7 @@ export default {
         };
         item.kanbanArray.push(addValue);
         await this.$store.dispatch('issues/addToKanban', addData);
-        await this.saveTaskChanges(item);
+        // await this.saveTaskChanges(item);
       }
     },
 

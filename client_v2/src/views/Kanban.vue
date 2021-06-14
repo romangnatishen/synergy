@@ -16,9 +16,15 @@
     </CCardBody>
     </CCard>
 
-    <div v-if="showCarusel===false">
+    <div v-if="showCarusel===false" class="add_button">
+      <CButton        
+        btn-lg
+        color="success"
+        size="sm"
+        @click="refreshKanban()"      >
+        <CIcon name="cil-notes"/> Odśwież
+      </CButton>
       <CButton
-        class="add_button"
         btn-lg
         color="success"
         v-if="showNewTaskButton"
@@ -27,27 +33,6 @@
         <CIcon name="cil-notes"/> Dodaj
       </CButton>
     </div>
-    <CRow v-if="showCarusel===false">
-      <CCol>
-        <CSelect
-        label="Wykonawca"
-        horizontal
-        :value.sync="filterExecutor"
-        :options="executorsList"
-        />
-      </CCol>
-      <CCol>
-        <CButton
-          class="panel-button"
-          color="primary"
-          variant="outline"
-          square
-          size="sm"
-          @click="refreshKanban()"      >
-          Odśwież
-        </CButton>
-      </CCol>
-    </CRow>
     <div class="task-board" v-if="showCarusel===false">
         <div class="task-column"
         v-for="column in kanban_data"
@@ -254,11 +239,7 @@ export default {
       filterProject:0,
       kanban_data: [],
       issue_comments: [],
-
       issue_comments_fields : [
-      // { key:'id'},
-      // { key:'issue_id'},
-      // { key:'user_id'},
       { key:'user_name', label:'Użytkownik'},
       { key:'description', label:'Opis'},
       { key:'createdAt', label:'Data zmiany'},
@@ -478,71 +459,77 @@ export default {
   },
 
   async refreshKanban() {
+    if (this.filterExecutor) {
+      this.kanban_data =  [
+        {id:1, redmine_status_id:8, title: "Zaplanowane",tasks: []},
+        {id:2, redmine_status_id:2, title:"Na wykonaniu", tasks:[]},
+        {id:3, redmine_status_id:3, title:"Sprawdzenie", tasks:[]},
+        {id:4, redmine_status_id:7, title:"Zawieszone", tasks:[]},
+        {id:5, redmine_status_id:5, title:"Do poprawy", tasks:[]}
+      ]
 
-    this.kanban_data =  [
-      {id:1, redmine_status_id:8, title: "Backlog",tasks: []},
-      {id:2, redmine_status_id:2, title:"Na wykonaniu", tasks:[]},
-      {id:3, redmine_status_id:3, title:"Sprawdzenie", tasks:[]},
-      {id:4, redmine_status_id:7, title:"Zawieszone", tasks:[]},
-      {id:5, redmine_status_id:5, title:"Do poprawy", tasks:[]}
-    ]
-
-    for await (let kanbanItem of this.kanban_data) {
-      const params = {
-        where:{
-            executor_id:this.filterExecutor,
-            kanban_status_id:kanbanItem.id
-          }
-      };
-      const kanbanIssueList = await this.$store.dispatch("issues/getKanbanIssueByProject", params, params);
-      const dataArray = kanbanIssueList.data;
-      if (dataArray) {
-        let tasks = [];
-        for await (let el of dataArray) {
-        // dataArray.forEach(el => {
-          let important_issue = 0;
-          if (el.important_issue != null) {
-            important_issue = el.important_issue
+      for await (let kanbanItem of this.kanban_data) {
+        const params = {
+          where:{
+              executor_id:this.filterExecutor,
+              kanban_status_id:kanbanItem.id
             }
+        };
+        const kanbanIssueList = await this.$store.dispatch("issues/getKanbanIssueByProject", params, params);
+        const dataArray = kanbanIssueList.data;
+        if (dataArray) {
+          let tasks = [];
+          for await (let el of dataArray) {
+          // dataArray.forEach(el => {
+            let important_issue = 0;
+            if (el.important_issue != null) {
+              important_issue = el.important_issue
+              }
 
-          const issueData = {
-            taskId: Number(el.issue_id).toString(),
-            redmineQuery: {}
-          };
-          const currentIssue = await this.$store.dispatch("issues/getIssue", issueData);
-          let estimated_hours; let due_date;
-          if (currentIssue) {
-            estimated_hours = currentIssue.data?.issue?.estimated_hours;
-            due_date = currentIssue.data?.issue?.due_date;
-          }
-          if (!estimated_hours) {
-            estimated_hours = 'brak';
-          }
-          if (!due_date) {
-            due_date = 'brak';
-          }
-          tasks.push(
-            {
-              id: el.id,
-              kanban_status_id:kanbanItem.id,
-              issue_id: el.issue_id,
-              issue_name: el.issue_name,
-              project_name: el.project_name,
-              important_issue: important_issue,
-              estimated_hours:estimated_hours,
-              due_date:due_date
+            const issueData = {
+              taskId: Number(el.issue_id).toString(),
+              redmineQuery: {}
+            };
+
+            const currentIssue = await this.$store.dispatch("issues/getIssue", issueData);
+            let estimated_hours; let due_date;
+            if (currentIssue) {
+              estimated_hours = currentIssue.data?.issue?.estimated_hours;
+              due_date = currentIssue.data?.issue?.due_date;
             }
-          );
+            if (!estimated_hours) {
+              estimated_hours = 'brak';
+            }
+            if (!due_date) {
+              due_date = 'brak';
+            }
+            tasks.push(
+              {
+                id: el.id,
+                kanban_status_id:kanbanItem.id,
+                issue_id: el.issue_id,
+                issue_name: el.issue_name,
+                project_name: el.project_name,
+                important_issue: important_issue,
+                estimated_hours:estimated_hours,
+                due_date:due_date
+              }
+            );
+          }
+          kanbanItem.tasks = tasks;
         }
-        kanbanItem.tasks = tasks;
       }
+
     }
   },
 
   async initialize() {
-
-    this.executorsList = await generalFunctions.redmineExecutorsList(this.$store);
-
+              
+    const currentRedmineUser = await this.$store.dispatch("projects/findCurrentRedmineUser");
+    if (currentRedmineUser) {
+      this.filterExecutor = currentRedmineUser.data.user.id;
+      await this.refreshKanban();
+    }
   },
 
   moveToBeginning(issue) {

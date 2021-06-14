@@ -6,4 +6,6 @@ module.exports = {
     remove: require('./delete'),
     profile: require('./profile'),
     findRedmineUsers:require('./findRedmineUsers'),
+    currentRedmineUser:require('./getCurrentUser'),
+
 }
