@@ -2,20 +2,20 @@
   "name": "@coreui/coreui-pro-vue-admin-template",
   "version": "3.2.2",
   "private": true,
-  "description": "CoreUI Pro Vue Bootstrap Admin Template",
+  "description": "Axioma Synergia",
   "author": {
-    "name": "CoreUI",
-    "url": "https://coreui.io",
-    "github": "https://github.com/coreui",
-    "twitter": "https://twitter.com/core_ui"
+    "name": "Axioma",
+    "url": "https://axioma.pl",
+    "github": "https://github.com/romangnatishen/synergy",
+    "twitter": "https://axioma.pl"
   },
   "contributors": [
     {
-      "name": "CoreUI Team",
-      "url": "https://github.com/orgs/coreui/people"
+      "name": "Axioma Team",
+      "url": "https://axioma.pl"
     }
   ],
-  "copyright": "Copyright 2020 creativeLabs Łukasz Holeczek",
+  "copyright": "Axioma 2021",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
