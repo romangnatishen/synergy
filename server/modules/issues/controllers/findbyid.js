@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
     const redmineQuery = req.query.redmineQuery;
     redmine.get_issue_by_id(Number(req.query.taskId),redmineQuery, function(err, data) {
     if (err) {
+        console.log(err);
         res.status(400).send(data)
     };
         // console.log("issue data");
