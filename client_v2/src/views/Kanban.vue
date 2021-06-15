@@ -459,7 +459,8 @@ export default {
   },
 
   async refreshKanban() {
-    if (this.filterExecutor) {
+  
+  if (this.filterExecutor) {
       this.kanban_data =  [
         {id:1, redmine_status_id:8, title: "Zaplanowane",tasks: []},
         {id:2, redmine_status_id:2, title:"Na wykonaniu", tasks:[]},
@@ -526,6 +527,7 @@ export default {
   async initialize() {
               
     const currentRedmineUser = await this.$store.dispatch("projects/findCurrentRedmineUser");
+    console.log('Current redmine user',currentRedmineUser);
     if (currentRedmineUser) {
       this.filterExecutor = currentRedmineUser.data.user.id;
       await this.refreshKanban();
