@@ -272,6 +272,31 @@ export default {
       this.executorsList = await generalFunctions.redmineExecutorsList(this.$store);
     },
 
+    async addKanbanComment() {
+
+      const currentProfile = this.$store.getters['profile/getProfile'];
+      if (currentProfile) {
+        const addData = {
+          issue_id:this.foundIssue.issue_id,
+          user_id:currentProfile.id,
+          user_name:currentProfile.name,
+          description:this.foundIssueComment
+        };
+        await this.$store.dispatch("issues/addKanbanComment", addData);
+
+      }
+
+      this.issueToFind = null;
+      this.foundIssue = null;
+      this.foundIssueProjectName=null;
+      this.foundIssueDescription=null;
+      this.issueIsFound = false;
+      this.showTaskDetails = false;
+      this.showNewTaskButton = true;
+      this.foundIssueComment = '';
+      
+    },
+
     async deleteFromKanban() {
       
       if (this.foundIssue) {
