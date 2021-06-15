@@ -527,7 +527,6 @@ export default {
   async initialize() {
               
     const currentRedmineUser = await this.$store.dispatch("projects/findCurrentRedmineUser");
-    console.log('Current redmine user',currentRedmineUser);
     if (currentRedmineUser) {
       this.filterExecutor = currentRedmineUser.data.user.id;
       await this.refreshKanban();
