@@ -87,7 +87,7 @@
                       </template>
                         <CDropdownItem @click="moveToAnotherStatus(task,true)">Do następnej kolumny</CDropdownItem>
                         <CDropdownItem @click="moveToAnotherStatus(task,false)">Do poprzedniej kolumny</CDropdownItem>
-                        <CDropdownItem @click="makeTaskImportant(task)"> Poproś o pilne wykonanie </CDropdownItem>
+                        <!-- <CDropdownItem @click="makeTaskImportant(task)"> Poproś o pilne wykonanie </CDropdownItem> -->
                         <CDropdownItem @click="closeTask(task,true)">Zamknij zadanie</CDropdownItem>
                         <CDropdownItem @click="deleteTask(task,true)">Usuń z Kanban</CDropdownItem>
                     </CDropdown>
@@ -553,7 +553,10 @@ export default {
         redmineStatusId = statusId.redmine_status_id;
         modificationComment = `Zmiana statusu zadania na: ${statusId.title}`;
       } else if (updateContent.acceptIssue === true) {
-        redmineStatusId = 4;
+        redmineStatusId = 6;
+        modificationComment = 'Usunięto zadanie z Kanban';
+      } else if (updateContent.removeIssue === true) {
+        redmineStatusId = 7;
         modificationComment = 'Usunięto zadanie z Kanban';
       }
 
@@ -698,7 +701,8 @@ async deleteTask(issue) {
               }
           };
         const redmineUpdateContent = {
-          kanban_status_id:6
+          redmine_status_id:7,
+          removeIssue:true
           };
         const redmineUpdateData = {
           updateFilter:JSON.stringify(redmineUpdateFilter),
