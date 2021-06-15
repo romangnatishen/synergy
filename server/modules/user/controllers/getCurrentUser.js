@@ -1,4 +1,4 @@
-const apiKeyConfig = require('../../redmine/getApiKey');
+const adminApiKeyConfig = require('../../redmine/getApiKey');
 // const adminApiKeyConfig = require('../../redmine/getAdminApiKey');
 
 module.exports = async (req, res, next) => {
