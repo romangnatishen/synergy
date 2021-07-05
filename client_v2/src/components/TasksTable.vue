@@ -652,7 +652,7 @@ export default {
 
 <style scoped>
 .card-body div {
-  margin: auto;
+  margin: inherit;
 }
 
 .is-grouped {
