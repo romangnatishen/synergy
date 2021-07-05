@@ -78,7 +78,6 @@ const checkIssueStatusInKanban = async (issue) => {
         user_type: 3
       };
       const newIssueUser = await IssueUsersModel.create(IssueUsersAddData);
-      console.log('new issue user',newIssueUser);
       if (issue_kanban_status.id!=1) {
         const KanbanAddData = {
           project_id: issue.project.id,
@@ -90,7 +89,6 @@ const checkIssueStatusInKanban = async (issue) => {
           issue_name: issue.subject,
         };
         const newKanbanIssue = await KanbanIssuesModel.create(KanbanAddData);
-        console.log('new kanban issue',newKanbanIssue);
       }
     }
   }
