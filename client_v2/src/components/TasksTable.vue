@@ -525,7 +525,6 @@ export default {
     },
 
     async saveTaskChanges(item) {
-      console.log(item);
       const updateData = {
         taskId: Number(item.id).toString(),
         redmineQuery: {
@@ -536,7 +535,6 @@ export default {
           },
         },
       };
-      console.log('redmine query', updateData);
       await this.$store
         .dispatch('issues/updateIssue', updateData)
         .then(async () => {
@@ -557,8 +555,20 @@ export default {
       const foundDataArrayIssue = this.dataArray.find(
         (element) => element.id === item.id
       );
-      console.log('found issue', foundDataArrayIssue);
       if (foundDataArrayIssue) {
+        const foundExecutor = item.available_users.find(
+          (el) => el.value === item.assigned_Id
+        );
+        if (foundExecutor) {
+          foundDataArrayIssue.assigned_to = foundExecutor.text;
+        }
+        const foundStatus = this.issue_statuses.find(
+          (el) => el.value === item.status_id
+        );
+        console.log(foundStatus);
+        if (foundStatus) {
+          foundDataArrayIssue.status = foundStatus.label;
+        }
         foundDataArrayIssue.status_id = item.status_id;
         foundDataArrayIssue.assigned_Id = item.assigned_Id;
       }
