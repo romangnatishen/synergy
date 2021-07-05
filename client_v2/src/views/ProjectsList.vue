@@ -1,6 +1,53 @@
 <template>
   <CCard>
     <CModal
+      :show.sync="projectSettingsVisible"
+      :no-close-on-backdrop="true"
+      :centered="true"
+      title="Ustawienia projektu"
+      size="lg"
+      color="dark"
+    >
+      <CCardBody>
+        <CRow>
+          <CCol>
+            <CSelect
+              label="Projekt w Hubstaff"
+              horizontal
+              :value.sync="currentHubstaff_id"
+              :options="hubstaff_projects"
+            />
+          </CCol>
+        </CRow>
+        <p></p>
+        <CRow class="switch-items">
+          <CSwitch
+            class="mx-1"
+            color="success"
+            name="enableStats"
+            :checked.sync="enableProjectStatistics"
+          />
+          <h6 class="switch-description">Włącz statystyki z Redmine</h6>
+        </CRow>
+      </CCardBody>
+      <template #header>
+        <h6 class="modal-title">Ustawienia projektu</h6>
+        <CButtonClose
+          @click="cancelProjectSettingsModification"
+          class="text-white"
+        />
+      </template>
+      <template #footer>
+        <CButton @click="saveProjectSettings" color="success"
+          >Zapisz zmiany</CButton
+        >
+        <CButton @click="cancelProjectSettingsModification" color="danger"
+          >Cofnij
+        </CButton>
+      </template>
+    </CModal>
+
+    <CModal
       :show.sync="projectDetailsVisible"
       :no-close-on-backdrop="true"
       :centered="true"
@@ -9,23 +56,25 @@
       color="dark"
     >
       <CCardBody>
-        <div v-if="showCaruselInDetails===true"
-            class="c-app flex-row align-items-center"
-          >
-            <div class="sk-grid">
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-              <div class="sk-grid-cube"></div>
-            </div>
+        <div
+          v-if="showCaruselInDetails === true"
+          class="c-app flex-row align-items-center"
+        >
+          <div class="sk-grid">
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
+            <div class="sk-grid-cube"></div>
           </div>
-              
-        <CDataTable v-if="showCaruselInDetails===false"
+        </div>
+
+        <CDataTable
+          v-if="showCaruselInDetails === false"
           :items="projectTasksSummary"
           :fields="projectTasksSummaryFields"
           items-per-page-select
@@ -41,7 +90,7 @@
       <template #header>
         <h6 class="modal-title">Szczegóły projektu</h6>
         <CButtonClose
-          @click="projectDetailsVisible=false"
+          @click="projectDetailsVisible = false"
           class="text-white"
         />
       </template>
@@ -53,10 +102,9 @@
           size="sm"
           @click="goToProject(currentProjectId)"
         >
-            Przejdż do zadań projektu
+          Przejdż do zadań projektu
         </CButton>
       </template>
-
     </CModal>
 
     <CCardBody
@@ -90,15 +138,26 @@
       >
         <template #id="{ item }">
           <td class="py-2">
-            <CButton
-              color="primary"
-              variant="outline"
-              square
-              size="sm"
-              @click="showProjectDetails(item.id)"
-            >
-              Info
-            </CButton>
+            <CForm inline>
+              <CButton
+                color="primary"
+                variant="outline"
+                square
+                size="sm"
+                @click="showProjectSettings(item)"
+              >
+                <CIcon name="cil-settings"> </CIcon>
+              </CButton>
+              <CButton
+                color="primary"
+                variant="outline"
+                square
+                size="sm"
+                @click="showProjectDetails(item.id)"
+              >
+                <CIcon name="cil-grid"> </CIcon>
+              </CButton>
+            </CForm>
           </td>
         </template>
         <template #name="{ item }">
@@ -134,19 +193,23 @@ export default {
 
   data() {
     return {
-      currentProjectId:0,
+      currentProjectId: 0,
+      currentProjectName: '',
+      projectSettingsVisible: false,
       projectDetailsVisible: false,
-      projectTasksSummary:[],
-      projectTasksSummaryFields : [
-        { key: 'assigned_to_name', title: 'Wykonawca'},
+      projectTasksSummary: [],
+      projectTasksSummaryFields: [
+        { key: 'assigned_to_name', title: 'Wykonawca' },
         { key: 'status_name', title: 'Status' },
         { key: 'count', title: 'Ilość' },
         { key: 'kanbanCount', title: 'W Kanbanie' },
       ],
-      showCaruselInDetails : false,
+      showCaruselInDetails: false,
       showCarusel: true,
       dataArray: [],
-      // dataArray: usersData.map((item, id) => { return {...item, id}}),
+      hubstaff_projects: [],
+      currentHubstaff_id: 0,
+      enableProjectStatistics: false,
       fields,
       details: [],
       collapseDuration: 0,
@@ -169,7 +232,7 @@ export default {
   methods: {
     async initialize() {
       await this.$store
-        .dispatch('projects/findAll', {})
+        .dispatch('projects/findAllInRedmine', {})
         .then((dataObject) => {
           let projectsData = [];
           dataObject.forEach((str) => {
@@ -178,7 +241,10 @@ export default {
                 created_on: moment(el.created_on).format('YYYY-MM-DD'),
                 id: el.id,
                 is_public: el.is_public,
+                hubstaff_id: 0,
+                enableProjectStatistics: false,
                 name: el.name,
+                _classes: '',
                 status: el.stauts,
                 updated_on: moment(el.updated_on).format('YYYY-MM-DD'),
               });
@@ -189,6 +255,40 @@ export default {
         .catch((err) => {
           console.log(err);
           this.dataArray = [];
+        });
+
+      for await (let projectItem of this.dataArray) {
+        const projectParams = {
+          redmine_id: projectItem.id,
+        };
+        const projectSettings = await this.$store.dispatch(
+          'projects/getProjectSettings',
+          projectParams
+        );
+        if (projectSettings.data) {
+          projectItem.hubstaff_id = projectSettings.data.hubstaff_id;
+          projectItem.enableProjectStatistics =
+            projectSettings.data.bg_monitoring;
+          projectItem._classes = 'bg-light';
+        }
+      }
+      // console.log(this.dataArray);
+      await this.$store
+        .dispatch('projects/findAllHubstaffProjects', {})
+        .then((hubstaffObject) => {
+          let projectsData = [];
+          hubstaffObject.data.projects.forEach((str) => {
+            projectsData.push({
+              value: str.id,
+              label: str.name,
+              status: str.status,
+            });
+          });
+          this.hubstaff_projects = projectsData;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.hubstaff_projects = [];
         });
     },
 
@@ -223,49 +323,91 @@ export default {
           project_id: projectId,
         },
       };
-      
+
       const kanbanTasks = await this.$store.dispatch(
         'issues/getKanbanIssueByProject',
         params
       );
 
       const currentprojectTasksSummary = [];
-      dataObject.forEach(el => {
-        el.forEach(currentIssue => {
+      dataObject.forEach((el) => {
+        el.forEach((currentIssue) => {
           let issueUser = currentIssue.author;
           if (currentIssue.assigned_to) {
             issueUser = currentIssue.assigned_to;
-          } 
+          }
           const foundInSummary = currentprojectTasksSummary.find(
-            sumEl => (sumEl.status.id===currentIssue.status.id&&sumEl.assigned_to.id===issueUser.id)
-            );
+            (sumEl) =>
+              sumEl.status.id === currentIssue.status.id &&
+              sumEl.assigned_to.id === issueUser.id
+          );
           const foundInKanban = kanbanTasks.data.find(
-            kanbanEl => (kanbanEl?.issue_id===currentIssue.id&&kanbanEl?.executor_id===currentIssue.assigned_to.id)
-            );
+            (kanbanEl) =>
+              kanbanEl?.issue_id === currentIssue.id &&
+              kanbanEl?.executor_id === currentIssue.assigned_to.id
+          );
           if (foundInSummary) {
             foundInSummary.count = foundInSummary.count + 1;
             if (foundInKanban) {
               foundInSummary.kanbanCount = foundInSummary.kanbanCount + 1;
             }
           } else {
-              currentprojectTasksSummary.push(
-                {
-                  status : currentIssue.status,
-                  status_name : currentIssue.status.name,
-                  assigned_to : issueUser,
-                  assigned_to_name : issueUser.name,
-                  count : 1,
-                  kanbanCount : (foundInKanban) ? 1 : 0
-                }
-              );
+            currentprojectTasksSummary.push({
+              status: currentIssue.status,
+              status_name: currentIssue.status.name,
+              assigned_to: issueUser,
+              assigned_to_name: issueUser.name,
+              count: 1,
+              kanbanCount: foundInKanban ? 1 : 0,
+            });
           }
-        })
-      })
+        });
+      });
       this.projectTasksSummary = currentprojectTasksSummary;
       this.showCaruselInDetails = false;
       this.currentProjectId = 0;
-
     },
+
+    async showProjectSettings(item) {
+      this.projectSettingsVisible = true;
+      this.currentProjectId = item.id;
+      this.currentProjectName = item.name;
+      this.currentHubstaff_id = item.hubstaff_id;
+      this.enableProjectStatistics = item.enableProjectStatistics;
+    },
+
+    cancelProjectSettingsModification() {
+      this.projectSettingsVisible = false;
+      this.currentProjectId = 0;
+      this.currentProjectName = '';
+      this.currentHubstaff_id = 0;
+      this.enableProjectStatistics = false;
+    },
+
+    async saveProjectSettings() {
+      if (this.currentHubstaff_id) {
+        const foundProject = this.dataArray.find(
+          (projectItem) => projectItem.id === this.currentProjectId
+        );
+        if (foundProject) {
+          foundProject.hubstaff_id = this.currentHubstaff_id;
+          foundProject.enableProjectStatistics = this.enableProjectStatistics;
+        }
+        const projectSettings = {
+          redmine_id: this.currentProjectId,
+          name: this.currentProjectName,
+          hubstaff_id: this.currentHubstaff_id,
+          bg_monitoring: this.enableProjectStatistics,
+        };
+        this.$store.dispatch('projects/saveProjectSettings', projectSettings);
+      }
+      this.projectSettingsVisible = false;
+      this.currentProjectId = 0;
+      this.currentProjectName = '';
+      this.currentHubstaff_id = 0;
+      this.enableProjectStatistics = false;
+    },
+
     toggleDetails(item) {
       this.$set(this.dataArray[item.id], '_toggled', !item._toggled);
       this.collapseDuration = 300;
@@ -276,7 +418,7 @@ export default {
 
     async goToProject(projectId) {
       this.showCaruselInDetails = false;
-      if (projectId) {        
+      if (projectId) {
         this.$store.dispatch('projects/setFilterProject', projectId);
         this.$router.push({
           name: 'TasksList',
@@ -293,5 +435,26 @@ export default {
 <style scoped>
 .card-body div {
   margin: auto;
+}
+</style>
+
+<style lang="scss" scoped>
+@import '../assets/scss/style';
+
+.switch-items {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 0;
+
+  @media screen and(max-width: 568px) {
+    margin-left: -5px;
+  }
+}
+
+.switch-description {
+  margin-left: 10px;
+  vertical-align: middle;
+  margin-bottom: 0;
 }
 </style>

@@ -8,8 +8,11 @@ module.exports = async (req, res) => {
       const data = {
         ...req.body        
     };
+
     const kanbanNewComment = await Model.create(data).catch((err) =>{
         res.status(400).send('Kanban comment is not created');
         });
-    res.status(200).send(kanbanNewComment);            
+    
+    res.status(200).send(kanbanNewComment);  
+
 };

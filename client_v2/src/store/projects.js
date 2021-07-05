@@ -117,13 +117,105 @@ export default {
       // 			return [];
     },
 
-    async findAll() {
+    async findAllHubstaffProjects() {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.HUBSTAFF_HOST}/projects`,
+        undefined,
+        undefined
+      );
+      const response = await axios(data);
+      return response;
+    },
+
+    async saveProjectSettings(payload, params) {
+      const data = requestDataHandler(
+        'POST',
+        `${hostSettings.DB_HOST}/project_settings`,
+        params,
+        params
+      );
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsByProject(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistics_by_project`,
+        params,
+        params
+      );
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsProjectExecutors(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistics_executors`,
+        params,
+        params
+      );
+      // console.log('project executors', data);
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsProjectStatuses(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistics_statuses`,
+        params,
+        params
+      );
+      // console.log('project statuses', data);
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsProjects(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistics_projects`,
+        params,
+        params
+      );
+      // console.log('projects', data);
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsPeriods(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistics_periods`,
+        params,
+        params
+      );
+      // console.log('periods', data);
+      const response = await axios(data);
+      return response;
+    },
+
+    async getProjectSettings(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/project_settings`,
+        params,
+        params
+      );
+      const response = await axios(data);
+      return response;
+    },
+
+    async findAllInRedmine() {
       let redmineParams = redmineConnection(this.getters);
       const filterProjectsByCountry = generalFunctions.filterProjectsByCountry;
 
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/projects`,
+        `${hostSettings.DB_HOST}/projects_redmine`,
         undefined,
         redmineParams
       );
@@ -142,7 +234,7 @@ export default {
           redmineParams = redmineConnection(this.getters, params);
           let nextData = requestDataHandler(
             'GET',
-            `${hostSettings.DB_HOST}/projects`,
+            `${hostSettings.DB_HOST}/projects_redmine`,
             undefined,
             redmineParams
           );

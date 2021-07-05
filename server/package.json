@@ -24,7 +24,8 @@
     "npm": "^7.11.1",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^5.22.3"
+    "sequelize": "^5.22.3",
+    "slack": "^11.0.2"
   },
   "devdependencies": {
     "nodemon": "^2.0.4"

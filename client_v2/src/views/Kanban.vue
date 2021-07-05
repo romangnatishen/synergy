@@ -33,85 +33,103 @@
         <CIcon name="cil-notes"/> Dodaj
       </CButton>
     </div>
-    <div class="task-board" v-if="showCarusel===false">
-        <div class="task-column"
-        v-for="column in kanban_data"
-        :key="column.id"
-        >
-        <div>
+    <CTabs>
+      <CTab title="Moje zadania">
+        <p></p>
+        <div class="task-board" v-if="showCarusel===false">        
+          <div class="task-column"
+          v-for="column in kanban_data"
+          :key="column.id"
+          >
           <div>
-            <strong>{{column.title}}</strong>
+            <div>
+              <strong>{{column.title}}</strong>
+            </div>
+          </div>
+            <draggable :delay="draggableConfig.delay"
+                      :touchStartThreshold="draggableConfig.touchStartThreshold"
+                      :id="column.id"
+                      :key="column.id"
+                      :list="column.tasks"
+                      :animation="200"
+                      group="tasks"
+                      class="draggable-container"
+                      @change="columnChanged">
+                <!-- <CCard @dragend="updateKanban(task)" class="card text-white bg-success mb-3" style="width: 95%; bg-primary" -->
+
+                <!-- <CCard class="card mb-3" style="width: 95%; bg-success" -->
+              <CCard class="issue_card"
+              v-for="(task) in column.tasks"
+              :key="task.id"
+              :task="task"
+              :column_id="column.id"
+              >
+                <CCardHeader v-bind:class="[task.important_issue > 0 ? important_issue : normal_issue]">
+                  <CRow>
+                    <CCol>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        square
+                        size="sm"
+                        @click="toggleDetails(task)"
+                    >
+                        {{task.issue_id}}
+                      </CButton>
+                    </CCol>
+                    <CCol>
+                      <CDropdown class="dropdown"
+                        placement="bottom-end"
+                        in-nav
+                      >
+                        <template #toggler>
+                          <CHeaderNavLink>
+                            <CIcon name="cil-settings"/>
+                            <!-- <CBadge shape="pill" color="warning"></CBadge> -->
+                          </CHeaderNavLink>
+                        </template>
+                          <CDropdownItem @click="moveToAnotherStatus(task,true)">Do następnej kolumny</CDropdownItem>
+                          <CDropdownItem @click="moveToAnotherStatus(task,false)">Do poprzedniej kolumny</CDropdownItem>
+                          <!-- <CDropdownItem @click="makeTaskImportant(task)"> Poproś o pilne wykonanie </CDropdownItem> -->
+                          <CDropdownItem @click="closeTask(task,true)">Zamknij zadanie</CDropdownItem>
+                          <CDropdownItem @click="deleteTask(task,true)">Usuń z Kanban</CDropdownItem>
+                      </CDropdown>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+                <CCardBody>
+                    <strong>{{task.project_name}}</strong>
+                    <div>{{task.issue_name}}</div>
+                </CCardBody>
+                <CCardFooter>
+                  <CRow>
+                    <CCol>
+                      {{task.due_date}}
+                    </CCol>
+                    <CCol>
+                      {{task.estimated_hours}}
+                    </CCol>
+                  </CRow>
+                </CCardFooter>
+              </CCard>
+            </draggable>
           </div>
         </div>
-          <draggable :delay="draggableConfig.delay"
-                     :touchStartThreshold="draggableConfig.touchStartThreshold"
-                     :id="column.id"
-                     :key="column.id"
-                     :list="column.tasks"
-                     :animation="200"
-                     group="tasks"
-                     class="draggable-container"
-                     @change="columnChanged">
-              <!-- <CCard @dragend="updateKanban(task)" class="card text-white bg-success mb-3" style="width: 95%; bg-primary" -->
-
-              <!-- <CCard class="card mb-3" style="width: 95%; bg-success" -->
-            <CCard class="issue_card"
-            v-for="(task) in column.tasks"
-            :key="task.id"
-            :task="task"
-            :column_id="column.id"
-            >
-              <CCardHeader v-bind:class="[task.important_issue > 0 ? important_issue : normal_issue]">
-                <CRow>
-                  <CCol>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      square
-                      size="sm"
-                      @click="toggleDetails(task)"
-                  >
-                      {{task.issue_id}}
-                    </CButton>
-                  </CCol>
-                  <CCol>
-                    <CDropdown class="dropdown"
-                      placement="bottom-end"
-                      in-nav
-                    >
-                      <template #toggler>
-                        <CHeaderNavLink>
-                          <CIcon name="cil-settings"/>
-                          <!-- <CBadge shape="pill" color="warning"></CBadge> -->
-                        </CHeaderNavLink>
-                      </template>
-                        <CDropdownItem @click="moveToAnotherStatus(task,true)">Do następnej kolumny</CDropdownItem>
-                        <CDropdownItem @click="moveToAnotherStatus(task,false)">Do poprzedniej kolumny</CDropdownItem>
-                        <!-- <CDropdownItem @click="makeTaskImportant(task)"> Poproś o pilne wykonanie </CDropdownItem> -->
-                        <CDropdownItem @click="closeTask(task,true)">Zamknij zadanie</CDropdownItem>
-                        <CDropdownItem @click="deleteTask(task,true)">Usuń z Kanban</CDropdownItem>
-                    </CDropdown>
-                  </CCol>
-                </CRow>
-              </CCardHeader>
-              <CCardBody>
-                  <strong>{{task.project_name}}</strong>
-                  <div>{{task.issue_name}}</div>
-              </CCardBody>
-              <CCardFooter>
-                <CRow>
-                  <CCol>
-                    {{task.due_date}}
-                  </CCol>
-                  <CCol>
-                    {{task.estimated_hours}}
-                  </CCol>
-                </CRow>
-              </CCardFooter>
-            </CCard>
-          </draggable>
-        </div>
-    </div>
+      </CTab>
+      <CTab title="Testuję">
+        <TasksTable 
+          :dataArray="testingArray"
+          :issue_statuses="issue_statuses"
+        />
+        
+      </CTab>
+      <CTab title="Monitoruję">
+        <TasksTable 
+          :dataArray="monitoringArray"
+          :issue_statuses="issue_statuses"
+        />        
+      </CTab>
+    </CTabs>
 
     <CModal
       :show.sync="showNewTask"
@@ -207,13 +225,17 @@
 
 <script>
 import draggable from "vuedraggable";
+import moment from 'moment';
+
 import generalFunctions from '../plugins/generalFunctions'
 import { throttle } from 'throttle-debounce';
+import TasksTable from '../components/TasksTable.vue'
 
 export default {
   name: "App",
   components: {
-    draggable
+    draggable,
+    TasksTable
   },
   data() {
     return {
@@ -221,6 +243,9 @@ export default {
         delay: 0,
         threshold: 0,
       },
+      monitoringArray:[],
+      testingArray:[],
+      issue_statuses:[],
       showCarusel:true,
       issueIsFound:false,
       showTaskDetails:false,
@@ -458,16 +483,32 @@ export default {
 
   },
 
+  async refreshTestingTasks() {
+    
+  },
+
+  async changeIssueStatusInKanban(issue_id, newStatus ) {
+    const updateFilter = {
+        where:
+          {
+              issue_id: issue_id,
+          }
+      };
+    const updateContent = {
+      kanban_status_id:newStatus
+      };
+    const updateData = {
+      updateFilter:JSON.stringify(updateFilter),
+      updateContent:JSON.stringify(updateContent)
+    };
+    await this.$store.dispatch("issues/updateKanbanIssue", updateData, updateData);
+  },
+
   async refreshKanban() {
   
   if (this.filterExecutor) {
-      this.kanban_data =  [
-        {id:1, redmine_status_id:8, title: "Zaplanowane",tasks: []},
-        {id:2, redmine_status_id:2, title:"Na wykonaniu", tasks:[]},
-        {id:3, redmine_status_id:3, title:"Sprawdzenie", tasks:[]},
-        {id:4, redmine_status_id:7, title:"Zawieszone", tasks:[]},
-        {id:5, redmine_status_id:5, title:"Do poprawy", tasks:[]}
-      ]
+      
+      this.kanban_data = generalFunctions.kanbanData();
 
       for await (let kanbanItem of this.kanban_data) {
         const params = {
@@ -479,58 +520,176 @@ export default {
         const kanbanIssueList = await this.$store.dispatch("issues/getKanbanIssueByProject", params, params);
         const dataArray = kanbanIssueList.data;
         if (dataArray) {
-          let tasks = [];
           for await (let el of dataArray) {
-          // dataArray.forEach(el => {
             let important_issue = 0;
             if (el.important_issue != null) {
               important_issue = el.important_issue
               }
-
             const issueData = {
               taskId: Number(el.issue_id).toString(),
               redmineQuery: {}
             };
-
             const currentIssue = await this.$store.dispatch("issues/getIssue", issueData);
             let estimated_hours; let due_date;
             if (currentIssue) {
               estimated_hours = currentIssue.data?.issue?.estimated_hours;
               due_date = currentIssue.data?.issue?.due_date;
-            }
-            if (!estimated_hours) {
-              estimated_hours = 'brak';
-            }
-            if (!due_date) {
-              due_date = 'brak';
-            }
-            tasks.push(
-              {
-                id: el.id,
-                kanban_status_id:kanbanItem.id,
-                issue_id: el.issue_id,
-                issue_name: el.issue_name,
-                project_name: el.project_name,
-                important_issue: important_issue,
-                estimated_hours:estimated_hours,
-                due_date:due_date
+              if (!estimated_hours) {
+                estimated_hours = 'brak';
               }
-            );
+              if (!due_date) {
+                due_date = 'brak';
+              }
+              const kanban_data_item = this.kanban_data.find(element => element.redmine_status_id === currentIssue.data.issue.status.id);
+              if (kanban_data_item) {
+                if (el.kanban_status_id != kanban_data_item.id) {
+                  this.changeIssueStatusInKanban(el.issue_id, kanban_data_item.id);
+                }           
+                
+                kanban_data_item.tasks.push(
+                  {
+                    id: el.id,
+                    kanban_status_id:kanban_data_item.id,
+                    issue_id: el.issue_id,
+                    issue_name: el.issue_name,
+                    project_name: el.project_name,
+                    important_issue: important_issue,
+                    estimated_hours:estimated_hours,
+                    due_date:due_date
+                  }
+                );                
+              }
+            }            
           }
-          kanbanItem.tasks = tasks;
         }
       }
 
     }
   },
 
+  async findIssuesByUser(currentRedmineUser, user_type) {
+
+    const issueData = {
+      user_id: Number(currentRedmineUser.data.user.id).toString(),
+      user_type:user_type
+    };
+
+    const user_issues = await this.$store.dispatch("issues/findIssuesByUser", issueData);
+    return user_issues;
+// if (issue_users.data) {
+    // }
+  },
+
+  async fillIssueTable(currentArray, statusArray) {
+    let projectsData = [];
+    for await (let arrayItem of currentArray.data) {
+      
+      const issueData = {
+        taskId: Number(arrayItem.issue_id).toString(),
+        redmineQuery: {}
+      };
+      const currentIssue = await this.$store.dispatch("issues/getIssue", issueData);
+      if (currentIssue.data) {
+        const el = currentIssue.data;
+        if (el.issue.closed_on === null) {
+
+          if (!el.estimated_hours) {
+            el.estimated_hours = 0;
+          }
+          let assignedName = '';
+          let assignedId = '';
+          if (el.issue.assigned_to) {
+            assignedName = el.issue.assigned_to['name'];
+            assignedId = el.issue.assigned_to['id'];
+          }
+
+          let statusName = '';
+          let statusId = '';
+          if (el.issue.assigned_to) {
+            statusName = el.issue.status['name'];
+            statusId = el.issue.status['id'];
+          }
+          let trackerName = '';
+          if (el.issue.assigned_to) {
+            trackerName = el.issue.tracker['name'];
+          }
+
+          let moduleValue = '';
+          projectsData.push({
+            id: el.issue.id,
+            kanban_executors: [],
+            kanban_monitors: [],
+            kanban_testers: [],
+            issue_executors: [],
+            available_users: [],
+            assigned_to: assignedName,
+            assigned_Id: assignedId,
+            executor_id:assignedId,
+            author: el.issue.author,
+            created_on: moment(el.issue.created_on).format('YYYY-MM-DD'),
+            description: el.issue.description,
+            due_date: moment(el.issue.due_date).format('YYYY-MM-DD'),
+            estimated_hours: el.estimated_hours,
+            priority: el.issue.priority,
+            project: el.issue.project,
+            start_date: moment(el.issue.start_date).format('YYYY-MM-DD'),
+            status: statusName,
+            status_id: statusId,
+            subject: el.issue.subject,
+            tracker: trackerName,
+            module: moduleValue,
+            comment: '',
+            _toggled: false,
+            kanban_issue_comments: [],  
+            monitor_id:assignedId,
+            tester_id:assignedId,
+            showSuccessfullRedmineNotification: false,
+          });
+        }
+      }
+    }
+    return projectsData;
+  },
+
   async initialize() {
               
+    const statusesDataObject = await this.$store.dispatch(
+      'issues/findIssueStatuses',
+      {}
+    );
+    if (statusesDataObject) {
+      let statusesData = [];
+      statusesDataObject.data.issue_statuses.forEach((el) => {
+        statusesData.push({
+          value: el.id,
+          label: el.name,
+        });
+      });
+      this.issue_statuses = statusesData;
+    } else {
+      this.issue_statuses = [];
+    }
+
     const currentRedmineUser = await this.$store.dispatch("projects/findCurrentRedmineUser");
     if (currentRedmineUser) {
       this.filterExecutor = currentRedmineUser.data.user.id;
       await this.refreshKanban();
+      
+      const monitoringIssues = await this.findIssuesByUser(currentRedmineUser,1);
+      const testingIssues = await this.findIssuesByUser(currentRedmineUser, 2);
+      
+      this.monitoringArray = await this.fillIssueTable(monitoringIssues,[]);    
+      
+      const filterStatuses = [3,5];
+      this.testingArray = await this.fillIssueTable(testingIssues,filterStatuses);      
+
+      // console.log('monitoring array',);
+      // console.log('testing array',this.testingArray);
+
     }
+
+    // await this.refreshTestingTasks();
+
   },
 
   moveToBeginning(issue) {
@@ -638,6 +797,7 @@ export default {
   },
 
   async closeTask(issue) {
+    
     if (issue) {
       const currentStatus = Number(issue.kanban_status_id) - 1;
       const tasksFrom = this.kanban_data[currentStatus].tasks;
@@ -678,6 +838,7 @@ export default {
 
 async deleteTask(issue) {
     if (issue) {
+      // console.log('issue', issue);
       const currentStatus = Number(issue.kanban_status_id) - 1;
       const tasksFrom = this.kanban_data[currentStatus].tasks;
       const index = tasksFrom.indexOf(issue);
@@ -687,7 +848,7 @@ async deleteTask(issue) {
             where:
               {
                   issue_id: issue.issue_id,
-                  executor_id: this.filterExecutor
+                  executor_id: this.filterExecutor,                  
               }
           };
         const updateData = {
@@ -702,7 +863,7 @@ async deleteTask(issue) {
               }
           };
         const redmineUpdateContent = {
-          redmine_status_id:7,
+          redmine_status_id:1,
           removeIssue:true
           };
         const redmineUpdateData = {

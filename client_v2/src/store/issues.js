@@ -182,6 +182,88 @@ export default {
       return [];
     },
 
+    async addIssueUser(payload, params) {
+      const data = requestDataHandler(
+        'POST',
+        `${hostSettings.DB_HOST}/issue_user`,
+        params,
+        params
+      );
+      const response = await axios(data).catch((err) => {
+        console.log(err);
+        return [];
+      });
+      // console.log(response);
+
+      if (typeof response === 'object' && response.status === 200) {
+        //			commit("SET_ALL", parsedResponse);
+        return response;
+      }
+      return [];
+    },
+
+
+    async findIssuesByUser(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/issues_by_user`,
+        params,
+        params
+      );
+      const response = await axios(data).catch((err) => {
+        console.log(err);
+        return [];
+      });
+      // console.log(response);
+
+      if (typeof response === 'object' && response.status === 200) {
+        //			commit("SET_ALL", parsedResponse);
+        return response;
+      }
+      return [];
+    },
+
+    async findIssueUsers(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/issue_users`,
+        params,
+        params
+      );
+      const response = await axios(data).catch((err) => {
+        console.log(err);
+        return [];
+      });
+      // console.log(response);
+
+      if (typeof response === 'object' && response.status === 200) {
+        //			commit("SET_ALL", parsedResponse);
+        return response;
+      }
+      return [];
+    },
+
+    async deleteIssueUser(payload, params) {
+      // console.log(params);
+      const data = requestDataHandler(
+        'POST',
+        `${hostSettings.DB_HOST}/delete_issue_users`,
+        params,
+        params
+      );
+      const response = await axios(data).catch((err) => {
+        console.log(err);
+        return [];
+      });
+      // console.log(response);
+
+      if (typeof response === 'object' && response.status === 200) {
+        //			commit("SET_ALL", parsedResponse);
+        return response;
+      }
+      return [];
+    },
+
     async deleteKanbanIssue(payload, params) {
       const data = requestDataHandler(
         'POST',
@@ -193,7 +275,6 @@ export default {
         console.log(err);
         return [];
       });
-      // console.log(response);
 
       if (typeof response === 'object' && response.status === 200) {
         //			commit("SET_ALL", parsedResponse);

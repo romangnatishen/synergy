@@ -27,7 +27,10 @@ module.exports = async (req, res, next) => {
 
         if (isErr===false) {
             res.status(200).send('')
-        } else  res.status(400).send(data)
+        } else {
+            console.log(errJSON);
+            res.status(400).send(data)
+        }
     };
       res.status(200).send(data);
     });

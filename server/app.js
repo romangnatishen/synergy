@@ -15,6 +15,11 @@ const timeentriesRouter = require('./modules/time_entries/routes');
 const calendar_events = require('./modules/calendar_events/routes');
 const calendar_participants = require('./modules/calendar_participants/routes');
 
+const issue_users = require('./modules/issue_users/routes');
+
+const redmine_stats = require('./modules/redmine_stat/routes');
+const projects = require('./modules/projects/routes');
+
 // const contractRouter = require('./modules/contract/routes');
 const authRouter = require('./modules/auth/routes');
 
@@ -43,6 +48,10 @@ app.use(issuesRouter);
 app.use(timeentriesRouter);
 app.use(calendar_events);
 app.use(calendar_participants);
+app.use(issue_users);
+app.use(projects);
+
+app.use(redmine_stats);
 // app.use(contractRouter);
 app.use(authRouter);
 

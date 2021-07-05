@@ -9,10 +9,10 @@ module.exports = async (req, res, next) => {
   const config = {
     apiKey: redmineApiKey
   };
-
   const redmine = new Redmine(hostname, config);
-  redmine.current_user(req.query, function(err, data) {
+  let currentUser = await redmine.current_user(req.query, function(err, data) {
     if (err) {res.status(400).send(data)};
       res.status(200).send(data);
   });
+
 };
