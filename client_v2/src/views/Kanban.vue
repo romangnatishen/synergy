@@ -716,7 +716,7 @@ export default {
         redmineStatusId = 6;
         modificationComment = 'Usunięto zadanie z Kanban';
       } else if (updateContent.removeIssue === true) {
-        redmineStatusId = 7;
+        redmineStatusId = 1;
         modificationComment = 'Usunięto zadanie z Kanban';
       }
 
@@ -838,22 +838,28 @@ export default {
 
 async deleteTask(issue) {
     if (issue) {
+      let index = -1;
+      let tasksFrom = [];
       // console.log('issue', issue);
-      const currentStatus = Number(issue.kanban_status_id) - 1;
-      const tasksFrom = this.kanban_data[currentStatus].tasks;
-      const index = tasksFrom.indexOf(issue);
+      console.log('issue status',issue.kanban_status_id);
+      const kanbanColumnElement = this.kanban_data.find(kanban_element => Number(kanban_element.id) === Number(issue.kanban_status_id));
+      console.log('kanban data', this.kanban_data);
+      console.log('kanbanColumnElement',kanbanColumnElement);
+      if (kanbanColumnElement) {
+        tasksFrom = kanbanColumnElement.tasks;
+        index = tasksFrom.indexOf(issue);
+      }
       if (index > -1) {
         tasksFrom.splice(index, 1);
+      
         const deleteFilter = {
-            where:
-              {
-                  issue_id: issue.issue_id,
-                  executor_id: this.filterExecutor,                  
-              }
-          };
-        const updateData = {
-          deleteFilter:JSON.stringify(deleteFilter),
+          issue_id: issue.issue_id,
+          executor_name: '',
+          executor_id: this.filterExecutor,
         };
+        const updateData = JSON.stringify(deleteFilter);
+
+        console.log('update data',updateData);
         await this.$store.dispatch("issues/deleteKanbanIssue", updateData, updateData);
 
         const redmineUpdateFilter = {

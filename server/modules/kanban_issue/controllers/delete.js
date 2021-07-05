@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
                 executor_id: req.body.executor_id
             }
         };
-
+        console.log(deleteFilter);
         await Model.destroy(deleteFilter)
             .then(function (deletedRecord) {
                 createKanbanComment(comment_data);                

@@ -69,7 +69,7 @@ const checkIssueStatusInKanban = async (issue) => {
         const newKanbanIssue = await KanbanIssuesModel.create(addData);
       }
     }
-  }
+  } 
 };
 
 const isActiveProject = (project) => {
