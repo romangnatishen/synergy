@@ -713,7 +713,7 @@ export default {
         redmineStatusId = statusId.redmine_status_id;
         modificationComment = `Zmiana statusu zadania na: ${statusId.title}`;
       } else if (updateContent.acceptIssue === true) {
-        redmineStatusId = 6;
+        redmineStatusId = 4;
         modificationComment = 'Usunięto zadanie z Kanban';
       } else if (updateContent.removeIssue === true) {
         redmineStatusId = 1;
