@@ -17,7 +17,7 @@ const calendar_participants = require('./modules/calendar_participants/routes');
 
 const issue_users = require('./modules/issue_users/routes');
 
-const redmine_stats = require('./modules/redmine_stat/routes');
+const kanban_statistics = require('./modules/kanban_statistics/routes');
 const projects = require('./modules/projects/routes');
 
 // const contractRouter = require('./modules/contract/routes');
@@ -51,7 +51,7 @@ app.use(calendar_participants);
 app.use(issue_users);
 app.use(projects);
 
-app.use(redmine_stats);
+app.use(kanban_statistics);
 // app.use(contractRouter);
 app.use(authRouter);
 

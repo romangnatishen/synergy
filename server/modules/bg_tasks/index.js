@@ -1,4 +1,4 @@
 module.exports = {
-    redmineStatistics: require('./generateRedmineStatistics'),
+    kanbanStatistics: require('./generateKanbanStatistics'),
     kanbanStatuses: require('./checkKanbanStatuses'),
 }

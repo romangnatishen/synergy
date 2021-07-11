@@ -15,7 +15,7 @@
     });
 
     const bg_tasks = require('./modules/bg_tasks');    
-    const projectsArray = await bg_tasks.redmineStatistics().catch((err) =>{
+    await bg_tasks.kanbanStatistics().catch((err) =>{
         console.log(err);
         });
 

@@ -39,7 +39,7 @@
           >
             <div
               v-for="(executorValue, executorKey) in getCurrentExecutorsArray(
-                value.filterStr
+                value.id
               )"
               :key="executorKey"
             >
@@ -50,7 +50,7 @@
                     color="outline-primary"
                     class="my-2 my-sm-0"
                     type="submit"
-                    >{{ executorValue.name }}
+                    >{{ executorValue.executor_name }}
                   </CButton>
                   <!-- <div class="small text-muted">November 2017</div> -->
                 </CCol>
@@ -113,7 +113,7 @@
               />
             </div>
           </CTab>
-          <CTab title="Czas pracy w Hubstaff"> </CTab>
+          <!-- <CTab title="Czas pracy w Hubstaff"> </CTab> -->
         </CTabs>
       </CCardBody>
     </CCard>
@@ -125,6 +125,7 @@ import ProjectStatisticsChart from '../components/ProjectStatisticsChart';
 import sequrityCheck from '../plugins/sequrityCheck';
 import moment from 'moment';
 import { getStyle, hexToRgba } from '@coreui/utils/src';
+import generalFunctions from '../plugins/generalFunctions';
 
 export default {
   name: 'Dashboard',
@@ -151,7 +152,6 @@ export default {
       const result = this.executorsArray.filter(
         (executor) => executor.filterProjectStr === filterProject
       );
-      // console.log(result);
       return result;
     },
 
@@ -167,22 +167,43 @@ export default {
         date_from: this.date_from,
         date_to: this.date_to,
       };
+
+      const statisticsPeriods = await this.$store.dispatch(
+        'projects/getStatisticsPeriods',
+        executorsFilter
+      );
+
+      const statisticsStatuses = await this.$store.dispatch(
+        'projects/getStatisticsStatuses',
+        executorsFilter
+      );
+
+      this.chartLabels = [];
+      if (statisticsPeriods.data) {
+        statisticsPeriods.data.forEach((element) => {
+          this.chartLabels.push(this.getFormatedDateLabel(element.stat_date));
+        });
+      }
+
       const statisticsExecutors = await this.$store.dispatch(
         'projects/getStatisticsProjectExecutors',
         executorsFilter
       );
+
       const resArray = [];
       for await (let element of statisticsExecutors.data) {
-        let curExecutor = JSON.parse(element.assigned_to);
+        let curExecutor = {
+          executor_id: element.executor_id,
+          executor_name: element.executor_name,
+          filterProjectStr: element.project_id,
+          filterAssignedStr: element.executor_id,
+        };
         if (curExecutor != null) {
-          curExecutor.filterProjectStr = element.project;
-          curExecutor.filterAssignedStr = element.assigned_to;
-
           const statusesFilter = {
             date_from: this.date_from,
             date_to: this.date_to,
-            project: element.project,
-            assigned_to: element.assigned_to,
+            project_id: element.project_id,
+            executor_id: element.executor_id,
           };
 
           const statusesData = await this.$store.dispatch(
@@ -190,31 +211,48 @@ export default {
             statusesFilter
           );
 
-          const brandSuccess = getStyle('success') || '#4dbd74';
-          const brandInfo = getStyle('info') || '#20a8d8';
-          const brandDanger = getStyle('danger') || '#f86c6b';
-
-          let statusObject = {
-            label: '',
-            key: '',
-            backgroundColor: hexToRgba(brandInfo, 10),
-            borderColor: brandInfo,
-            pointHoverBackgroundColor: brandInfo,
-            borderWidth: 2,
-            data: [],
-          };
-          let executorDataSet = [];
-          statusesData.data.forEach((statusItem) => {
-            if (statusObject.key != statusItem.status) {
-              if (statusObject.data.length > 0) {
-                statusObject.data = Array.from(statusObject.data);
-                executorDataSet.push(JSON.parse(JSON.stringify(statusObject)));
+          const executorDataSet = [];
+          statisticsStatuses.data.forEach((statusItem) => {
+            const issuePeriodArray = [];
+            let issueTotalCount = 0;
+            statisticsPeriods.data.forEach((periodItem) => {
+              const foundData = statusesData.data.find((el) => {
+                if (
+                  el.stat_date === periodItem.stat_date &&
+                  Number(el.kanban_status_id) ===
+                    Number(statusItem.kanban_status_id)
+                ) {
+                  return el;
+                }
+              });
+              let issueCount = 0;
+              if (foundData) {
+                issueCount = foundData.issue_cnt;
               }
-              statusObject.key = statusItem.status;
-              statusObject.label = JSON.parse(statusItem.status).name;
-              statusObject.data = [];
-            } else {
-              statusObject.data.push(Number(statusItem.issue_cnt));
+              issueTotalCount = issueTotalCount + issueCount;
+              issuePeriodArray.push(issueCount);
+            });
+            let currentLabel = '';
+            const kanbanItem = generalFunctions
+              .kanbanData()
+              .find(
+                (kanbanItem) => kanbanItem.id === statusItem.kanban_status_id
+              );
+            if (kanbanItem) {
+              currentLabel = kanbanItem.title;
+            }
+
+            let statusObject = {
+              label: currentLabel,
+              key: statusItem.kanban_status_id,
+              backgroundColor: hexToRgba('#FFFFFF', 10),
+              borderColor: kanbanItem.color,
+              pointHoverBackgroundColor: kanbanItem.color,
+              borderWidth: 2,
+              data: issuePeriodArray,
+            };
+            if (issueTotalCount > 0) {
+              executorDataSet.push(JSON.parse(JSON.stringify(statusObject)));
             }
           });
           curExecutor.dataSet = executorDataSet;
@@ -230,21 +268,6 @@ export default {
         date_to: this.date_to,
       };
 
-      const statisticsPeriods = await this.$store.dispatch(
-        'projects/getStatisticsPeriods',
-        periodsFilter
-      );
-
-      this.chartLabels = [];
-      if (statisticsPeriods.data) {
-        statisticsPeriods.data.forEach((element) => {
-          this.chartLabels.push(this.getFormatedDateLabel(element.stat_date));
-        });
-      }
-
-      this.executorsArray = await this.getExecutorsArray();
-      console.log(this.executorsArray);
-
       const statisticsProjects = await this.$store.dispatch(
         'projects/getStatisticsProjects',
         periodsFilter
@@ -252,65 +275,15 @@ export default {
       this.projectsArray = [];
       if (statisticsProjects.data) {
         statisticsProjects.data.forEach((element) => {
-          const curProject = JSON.parse(element.project);
-          curProject.filterStr = element.project;
+          const curProject = {
+            name: element.project_name,
+            id: element.project_id,
+          };
           this.projectsArray.push(curProject);
         });
       }
 
-      // const statisticsStatuses = await this.$store.dispatch(
-      //   'projects/getStatisticsProjectStatuses',
-      //   periodsFilter
-      // );
-
-      // console.log('periods', statisticsPeriods);
-      // console.log('projects', statisticsProjects);
-      // console.log('statuses', statisticsStatuses);
-      // console.log('executors', statisticsExecutors);
-
-      // const brandSuccess = getStyle('success') || '#4dbd74';
-      // const brandInfo = getStyle('info') || '#20a8d8';
-      // const brandDanger = getStyle('danger') || '#f86c6b';
-
-      // let elements = 27;
-      // const data1 = [];
-      // const data2 = [];
-      // const data3 = [];
-
-      // for (let i = 0; i <= elements; i++) {
-      //   // data1.push(random(50, 200));
-      //   // data2.push(random(80, 100));
-      //   // data3.push(65);
-      // }
-      // const dataSet = [
-      //   {
-      //     label: 'My First dataset',
-      //     backgroundColor: hexToRgba(brandInfo, 10),
-      //     borderColor: brandInfo,
-      //     pointHoverBackgroundColor: brandInfo,
-      //     borderWidth: 2,
-      //     data: data1,
-      //   },
-      //   {
-      //     label: 'My Second dataset',
-      //     backgroundColor: 'transparent',
-      //     borderColor: brandSuccess,
-      //     pointHoverBackgroundColor: brandSuccess,
-      //     borderWidth: 2,
-      //     data: data2,
-      //   },
-      //   {
-      //     label: 'My Third dataset',
-      //     backgroundColor: 'transparent',
-      //     borderColor: brandDanger,
-      //     pointHoverBackgroundColor: brandDanger,
-      //     borderWidth: 1,
-      //     borderDash: [8, 5],
-      //     data: data3,
-      //   },
-      // ];
-
-      // console.log(projectData);
+      this.executorsArray = await this.getExecutorsArray();
     },
 
     color(value) {

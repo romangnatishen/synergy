@@ -47,7 +47,7 @@ export default {
                 beginAtZero: true,
                 maxTicksLimit: 1,
                 stepSize: 1,
-                max: 10,
+                max: 20,
               },
               gridLines: {
                 display: true,

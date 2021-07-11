@@ -1,12 +1,54 @@
 const kanbanData = () => {
   return [
-    { id: 1, redmine_status_id: 8, title: 'Zaplanowane', tasks: [] },
-    { id: 7, redmine_status_id: 9, title: 'Potwierdzone', tasks: [] },
-    { id: 2, redmine_status_id: 2, title: 'Na wykonaniu', tasks: [] },
-    { id: 4, redmine_status_id: 7, title: 'Zawieszone', tasks: [] },
-    { id: 3, redmine_status_id: 3, title: 'Sprawdzenie', tasks: [] },
-    { id: 6, redmine_status_id: 6, title: 'Klient', tasks: [] },
-    { id: 5, redmine_status_id: 5, title: 'Do poprawy', tasks: [] },
+    {
+      id: 1,
+      redmine_status_id: 8,
+      color: '#FDD835',
+      title: 'Zaplanowane',
+      tasks: [],
+    },
+    {
+      id: 7,
+      redmine_status_id: 9,
+      color: '#FFE082',
+      title: 'Potwierdzone',
+      tasks: [],
+    },
+    {
+      id: 2,
+      redmine_status_id: 2,
+      color: '#00BCD4',
+      title: 'Na wykonaniu',
+      tasks: [],
+    },
+    {
+      id: 4,
+      redmine_status_id: 7,
+      color: '#9E9E9E',
+      title: 'Zawieszone',
+      tasks: [],
+    },
+    {
+      id: 3,
+      redmine_status_id: 3,
+      color: '#AED581',
+      title: 'Sprawdzenie',
+      tasks: [],
+    },
+    {
+      id: 6,
+      redmine_status_id: 6,
+      color: '#8BC34A',
+      title: 'Klient',
+      tasks: [],
+    },
+    {
+      id: 5,
+      redmine_status_id: 5,
+      color: '#FFAB91',
+      title: 'Do poprawy',
+      tasks: [],
+    },
   ];
 };
 

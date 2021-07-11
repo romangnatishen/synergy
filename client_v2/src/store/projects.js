@@ -142,7 +142,7 @@ export default {
     async getStatisticsByProject(payload, params) {
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/statistics_by_project`,
+        `${hostSettings.DB_HOST}/statistics_by_projects`,
         params,
         params
       );
@@ -153,7 +153,7 @@ export default {
     async getStatisticsProjectExecutors(payload, params) {
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/statistics_executors`,
+        `${hostSettings.DB_HOST}/statistics_by_executors`,
         params,
         params
       );
@@ -165,7 +165,7 @@ export default {
     async getStatisticsProjectStatuses(payload, params) {
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/statistics_statuses`,
+        `${hostSettings.DB_HOST}/statistics_by_statuses`,
         params,
         params
       );
@@ -177,7 +177,19 @@ export default {
     async getStatisticsProjects(payload, params) {
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/statistics_projects`,
+        `${hostSettings.DB_HOST}/statistic_projects`,
+        params,
+        params
+      );
+      // console.log('projects', data);
+      const response = await axios(data);
+      return response;
+    },
+
+    async getStatisticsStatuses(payload, params) {
+      const data = requestDataHandler(
+        'GET',
+        `${hostSettings.DB_HOST}/statistic_statuses`,
         params,
         params
       );
@@ -189,12 +201,13 @@ export default {
     async getStatisticsPeriods(payload, params) {
       const data = requestDataHandler(
         'GET',
-        `${hostSettings.DB_HOST}/statistics_periods`,
+        `${hostSettings.DB_HOST}/statistic_periods`,
         params,
         params
       );
       // console.log('periods', data);
       const response = await axios(data);
+      // console.log('statistic periods', response);
       return response;
     },
 
