@@ -205,7 +205,7 @@ export default {
   methods: {
     async openInRedmine() {
       window.open(
-        'https://tasks.axioma.pl/issues/' + String(this.foundIssue.id)
+        'https://tasks.axioma.pl/issues/' + String(this.foundIssue.issue_id)
       );
     },
 
