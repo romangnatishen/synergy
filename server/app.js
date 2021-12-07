@@ -19,6 +19,7 @@ const issue_users = require('./modules/issue_users/routes');
 
 const kanban_statistics = require('./modules/kanban_statistics/routes');
 const projects = require('./modules/projects/routes');
+const leads = require('./modules/slack/routes');
 
 // const contractRouter = require('./modules/contract/routes');
 const authRouter = require('./modules/auth/routes');
@@ -50,6 +51,7 @@ app.use(calendar_events);
 app.use(calendar_participants);
 app.use(issue_users);
 app.use(projects);
+app.use(leads);
 
 app.use(kanban_statistics);
 // app.use(contractRouter);

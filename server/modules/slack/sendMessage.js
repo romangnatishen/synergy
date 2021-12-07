@@ -2,6 +2,9 @@ const Slack = require('slack')
   
 module.exports = async (params) => {
 
+
+    // C02Q3C99VUZ
+
     const token = process.env.SLACK_BOT_TOKEN;
     // channel = 'droma_erp';
     // channel = '@U025G55AMT4';
